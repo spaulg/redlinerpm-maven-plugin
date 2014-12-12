@@ -20,7 +20,7 @@ package uk.co.codezen.maven.redlinerpm.rpm.exception;
 /**
  * Duplicate RPM artifact file already exists exception
  */
-public class DuplicateRpmArtifactException extends AbstractRpmException
+final public class DuplicateRpmArtifactException extends AbstractRpmException
 {
     /**
      * Constructor

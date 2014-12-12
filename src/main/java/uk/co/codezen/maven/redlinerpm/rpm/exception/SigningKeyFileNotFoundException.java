@@ -20,7 +20,7 @@ package uk.co.codezen.maven.redlinerpm.rpm.exception;
 /**
  * Signing key file not found exception
  */
-public class SigningKeyFileNotFoundException extends AbstractRpmException
+final public class SigningKeyFileNotFoundException extends AbstractRpmException
 {
     /**
      * Constructor
