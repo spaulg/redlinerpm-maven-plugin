@@ -1,0 +1,100 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>uk.co.codezen</groupId>
+    <artifactId>test-redlinerpm-maven-plugin</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>rpm</packaging>
+
+    <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
+
+        <plugins>
+            <plugin>
+                <groupId>uk.co.codezen</groupId>
+                <artifactId>redlinerpm-maven-plugin</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <extensions>true</extensions>
+
+                <configuration>
+                    <packages>
+                        <package>
+                            <dependencies>
+                                <!-- minimum version -->
+                                <dependency>
+                                    <name>php</name>
+                                    <version>[5.3.8,)</version>
+                                </dependency>
+
+                                <!-- dependency range -->
+                                <dependency>
+                                    <name>php-mysql</name>
+                                    <version>[5.3.8,5.4)</version>
+                                </dependency>
+
+                                <!-- latest compatible version (no version is mandated in the rpm) -->
+                                <dependency>
+                                    <name>php-xml</name>
+                                    <version>RELEASE</version>
+                                </dependency>
+
+                                <!-- no version requirement, same as RELEASE -->
+                                <dependency>
+                                    <name>httpd</name>
+                                </dependency>
+
+                                <!-- exact version -->
+                                <dependency>
+                                    <name>php-mbstring</name>
+                                    <version>5.3.8</version>
+                                </dependency>
+                            </dependencies>
+
+                            <triggers>
+                                <trigger>
+                                    <scriptFile>foo.sh</scriptFile>
+                                    <program>/bin/sh</program>
+
+                                    <dependencies>
+                                        <dependency>
+                                            <name>php</name>
+                                            <version>5.3.8</version>
+                                        </dependency>
+                                    </dependencies>
+                                </trigger>
+                            </triggers>
+
+                            <rules>
+                                <rule>
+                                    <destination>/var/www</destination>
+
+                                    <includes>
+                                        <include>**/*.ini</include>
+                                    </includes>
+
+                                    <directives>
+                                        <directive>config</directive>
+                                        <directive>noreplace</directive>
+                                    </directives>
+                                </rule>
+
+                                <rule>
+                                    <destination>/var/www</destination>
+
+                                    <includes>
+                                        <include>**/*.php</include>
+                                    </includes>
+
+                                    <excludes>
+                                        <exclude>cache/*.php</exclude>
+                                    </excludes>
+                                </rule>
+                            </rules>
+                        </package>
+                    </packages>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

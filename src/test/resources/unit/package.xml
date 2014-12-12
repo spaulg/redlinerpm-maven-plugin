@@ -1,0 +1,74 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <groupId>uk.co.codezen</groupId>
+    <artifactId>test-redlinerpm-maven-plugin</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>rpm</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>uk.co.codezen</groupId>
+                <artifactId>redlinerpm-maven-plugin</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <extensions>true</extensions>
+
+                <configuration>
+                    <buildPath>target/test-classes/build</buildPath>
+
+                    <defaults>
+                        <owner>root</owner>
+                        <group>root</group>
+                        <fileMode>0644</fileMode>
+                    </defaults>
+
+                    <excludes>
+                        <source>.*\.bak</source>
+                    </excludes>
+
+                    <packages>
+                        <package>
+                            <name>test-redlinerpm-maven-plugin</name>
+                            <version>1.0-SNAPSHOT</version>
+                            <url>http://www.codezen.co.uk</url>
+                            <attach>true</attach>
+
+                            <rules>
+                                <rule>
+                                    <base>/</base>
+                                    <destination>/var/www</destination>
+                                    <owner>root</owner>
+                                    <group>root</group>
+                                    <fileMode>0644</fileMode>
+
+                                    <includes>
+                                        <include>**/*.ini</include>
+                                    </includes>
+
+                                    <directives>
+                                        <directive>config</directive>
+                                        <directive>noreplace</directive>
+                                    </directives>
+                                </rule>
+
+                                <rule>
+                                    <base>/</base>
+                                    <destination>/var/www</destination>
+
+                                    <includes>
+                                        <include>.*\.php</include>
+                                    </includes>
+
+                                    <excludes>
+                                        <exclude>cache/.*\.php</exclude>
+                                    </excludes>
+                                </rule>
+                            </rules>
+                        </package>
+                    </packages>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
