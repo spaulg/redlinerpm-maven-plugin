@@ -71,7 +71,9 @@ both, without the weaknesses.
 
 redlinerpm-maven-plugin provides OS agnostic builds, the rpm packaging type, 
 ant based flexible file inclusion/exclusion globs, building and deploying 
-multiple RPM packages, sane defaults, and adding directives to files.   
+multiple RPM packages, sane defaults, adding directives to files, and template
+triggers and event hook scripts using Java expression language and Maven EL
+variables.
 
 ## License
 
