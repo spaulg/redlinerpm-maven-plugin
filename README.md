@@ -22,7 +22,7 @@ Add the plugin to the <plugins> section within your pom.xml file.
         <configuration>
             <defaultUser>apache</defaultUser>
             <defaultGroup>apache</defaultGroup>
-            <defaultDestination>/var/www/</defaultDestination>
+            <defaultDestination>/var/www/${project.build.name}</defaultDestination>
 
             <excludes>
                 <source>**/*.bak</source>
