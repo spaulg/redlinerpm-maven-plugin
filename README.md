@@ -20,30 +20,18 @@ Add the plugin to the <plugins> section within your pom.xml file.
         <extensions>true</extensions>
     
         <configuration>
-            <buildPath>test</buildPath>
-            <defaultOwner>root</defaultOwner>
-            <defaultGroup>root</defaultGroup>
-            <defaultFileMode>0644</defaultFileMode>
-            <performCheckingForExtraFiles>true</performCheckingForExtraFiles>
-    
+            <defaultUser>apache</defaultUser>
+            <defaultGroup>apache</defaultGroup>
+            <defaultDestination>/var/www/</defaultDestination>
+
             <excludes>
                 <source>**/*.bak</source>
             </excludes>
     
             <packages>
                 <package>
-                    <name>mypackage</name>
-                    <version>1.0-SNAPSHOT</version>
-                    <url>http://www.codezen.co.uk</url>
-    
                     <rules>
                         <rule>
-                            <base>/</base>
-                            <destination>/var/www</destination>
-                            <owner>root</owner>
-                            <group>root</group>
-                            <fileMode>0644</fileMode>
-    
                             <includes>
                                 <include>**/*.ini</include>
                             </includes>
@@ -55,14 +43,13 @@ Add the plugin to the <plugins> section within your pom.xml file.
                         </rule>
     
                         <rule>
-                            <base>/</base>
-                            <destination>/var/www</destination>
-    
                             <includes>
-                                <include>**/*.php</include>
+                                <include>**/*</include>
                             </includes>
     
                             <excludes>
+                                <exclude>**/*.bak</exclude>
+                                <exclude>**/*.ini</exclude>
                                 <exclude>cache/*.php</exclude>
                             </excludes>
                         </rule>
