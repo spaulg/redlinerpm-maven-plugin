@@ -34,6 +34,20 @@
         <url>https://github.com/spaulg/redlinerpm-maven-plugin</url>
     </scm>
 
+    <distributionManagement>
+        <repository>
+            <id>codezen-sonatype-release</id>
+            <name>Codezen Sonatype release repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>codezen-sonatype-snapshot</id>
+            <name>Codezen Sonatype snapshot repository</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <build>
         <plugins>
             <plugin>
