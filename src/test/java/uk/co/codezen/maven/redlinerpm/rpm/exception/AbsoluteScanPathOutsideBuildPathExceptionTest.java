@@ -1,10 +1,12 @@
 package uk.co.codezen.maven.redlinerpm.rpm.exception;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
-public class AbsoluteScanPathOutsideBuildPathExceptionTest extends TestCase
+public class AbsoluteScanPathOutsideBuildPathExceptionTest
 {
-    public void testException()
+    @Test
+    public void exception()
     {
         AbsoluteScanPathOutsideBuildPathException ex
                 = new AbsoluteScanPathOutsideBuildPathException("scan", "build");

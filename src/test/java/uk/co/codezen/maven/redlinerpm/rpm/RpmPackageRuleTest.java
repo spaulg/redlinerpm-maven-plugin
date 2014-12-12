@@ -17,7 +17,8 @@
 
 package uk.co.codezen.maven.redlinerpm.rpm;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
+
 import org.apache.maven.monitor.logging.DefaultLog;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
@@ -26,11 +27,15 @@ import org.redline_rpm.payload.Directive;
 import uk.co.codezen.maven.redlinerpm.mojo.PackageRpmMojo;
 import uk.co.codezen.maven.redlinerpm.rpm.exception.InvalidRpmPackageRuleDirectiveException;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RpmPackageRuleTest extends TestCase
+public class RpmPackageRuleTest
 {
     private RpmPackageRule rpmFileRule;
     private RpmPackage rpmPackage;
@@ -39,8 +44,21 @@ public class RpmPackageRuleTest extends TestCase
     private List<String> directives;
     private Log log;
 
-    public void setUp()
+    String resourcePath;
+
+    @Before
+    public void setUp() throws Exception
     {
+        ClassLoader cl = this.getClass().getClassLoader();
+
+        URL buildReadmeResource = cl.getResource("build/README.md");
+
+        if (null == buildReadmeResource) {
+            throw new Exception("build/README.md resource could not be found");
+        }
+
+        resourcePath = new File(buildReadmeResource.getPath()).getParent();
+
         this.log = new DefaultLog(new ConsoleLogger());
 
         MavenProject mavenProject = new MavenProject();
@@ -51,7 +69,7 @@ public class RpmPackageRuleTest extends TestCase
         mojo.setDefaultGroup("root");
         mojo.setDefaultDestination("/var/www/test");
         mojo.setLog(this.log);
-        mojo.setBuildPath("target");
+        mojo.setBuildPath(resourcePath);
 
         this.rpmPackage = new RpmPackage();
         this.rpmPackage.setMojo(mojo);
@@ -66,18 +84,21 @@ public class RpmPackageRuleTest extends TestCase
         directives.add("noreplace");
     }
 
-    public void testDirectiveAccessors() throws InvalidRpmPackageRuleDirectiveException
+    @Test
+    public void directiveAccessors() throws InvalidRpmPackageRuleDirectiveException
     {
         this.rpmFileRule.setDirectives(directives);
         assertEquals(Directive.class, this.rpmFileRule.getDirectives().getClass());
     }
 
-    public void testPackageAccessors()
+    @Test
+    public void packageAccessors()
     {
         assertEquals(rpmPackage, this.rpmFileRule.getPackage());
     }
 
-    public void testBaseAccessors()
+    @Test
+    public void baseAccessors()
     {
         this.rpmFileRule.setBase("");
         assertEquals("/", this.rpmFileRule.getBase());
@@ -92,7 +113,8 @@ public class RpmPackageRuleTest extends TestCase
         assertEquals("/bar/", this.rpmFileRule.getBase());
     }
 
-    public void testDestinationAccessors()
+    @Test
+    public void destinationAccessors()
     {
         this.rpmFileRule.setDestination("");
         assertEquals(null, this.rpmFileRule.getDestination());
@@ -111,14 +133,16 @@ public class RpmPackageRuleTest extends TestCase
         assertEquals("/bar/", this.rpmFileRule.getDestinationOrDefault());
     }
 
-    public void testModeAccessors()
+    @Test
+    public void modeAccessors()
     {
         assertEquals(0644, this.rpmFileRule.getModeOrDefault());
         this.rpmFileRule.setFileMode(0755);
         assertEquals(0755, this.rpmFileRule.getModeOrDefault());
     }
 
-    public void testOwnerAccessors()
+    @Test
+    public void ownerAccessors()
     {
         this.rpmFileRule.setOwner("");
         assertEquals("root", this.rpmFileRule.getOwnerOrDefault());
@@ -134,7 +158,8 @@ public class RpmPackageRuleTest extends TestCase
         assertEquals("root", this.rpmFileRule.getOwnerOrDefault());
     }
 
-    public void testGroupAccessors()
+    @Test
+    public void groupAccessors()
     {
         this.rpmFileRule.setGroup("");
         assertEquals("root", this.rpmFileRule.getGroupOrDefault());
@@ -150,30 +175,39 @@ public class RpmPackageRuleTest extends TestCase
         assertEquals("root", this.rpmFileRule.getGroupOrDefault());
     }
 
-    public void testIncludeAccessors()
+    @Test
+    public void includeAccessors()
     {
         this.rpmFileRule.setIncludes(includes);
         assertEquals(includes, this.rpmFileRule.getIncludes());
     }
 
-    public void testExcludeAccessors()
+    @Test
+    public void excludeAccessors()
     {
         this.rpmFileRule.setExcludes(excludes);
         assertEquals(excludes, this.rpmFileRule.getExcludes());
     }
 
-    public void testLogAccessor()
+    @Test
+    public void logAccessor()
     {
         assertEquals(this.log, this.rpmFileRule.getLog());
     }
 
-    public void testScanPathAccessor()
+//    @Test
+//    public void scanPathAccessor()
+//    {
+//        String scanPath = new File("target/classes").getAbsolutePath() + "/";
+//        this.rpmFileRule.setBase("classes");
+//        assertEquals(scanPath, this.rpmFileRule.getScanPath());
+//    }
+
+    @Test
+    public void testListFiles() throws Exception
     {
-        String scanPath = new File("target/classes").getAbsolutePath() + "/";
-        this.rpmFileRule.setBase("classes");
-        assertEquals(scanPath, this.rpmFileRule.getScanPath());
+        String[] files = this.rpmFileRule.listFiles();
     }
 
     // todo: add something for addFiles
-    // todo: add something for listFiles
 }

@@ -1,21 +1,27 @@
 package uk.co.codezen.maven.redlinerpm.rpm;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
+
 import org.redline_rpm.payload.Directive;
 import uk.co.codezen.maven.redlinerpm.rpm.exception.InvalidRpmPackageRuleDirectiveException;
 
 import java.util.ArrayList;
 
-public class RpmPackageRuleDirectiveTest extends TestCase
+import org.junit.Before;
+import org.junit.Test;
+
+public class RpmPackageRuleDirectiveTest
 {
     private ArrayList<String> directiveList;
 
+    @Before
     public void setUp()
     {
         this.directiveList = new ArrayList<String>();
     }
 
-    public void testConfigDirective() throws Exception
+    @Test
+    public void configDirective() throws InvalidRpmPackageRuleDirectiveException
     {
         this.directiveList.add("config");
         Directive directive = RpmPackageRuleDirective.newDirective(this.directiveList);
@@ -23,7 +29,8 @@ public class RpmPackageRuleDirectiveTest extends TestCase
         assertEquals(0, directive.flag() & Directive.RPMFILE_DOC);
     }
 
-    public void testDocDirective() throws Exception
+    @Test
+    public void docDirective() throws InvalidRpmPackageRuleDirectiveException
     {
         this.directiveList.add("doc");
         Directive directive = RpmPackageRuleDirective.newDirective(this.directiveList);
@@ -31,7 +38,8 @@ public class RpmPackageRuleDirectiveTest extends TestCase
         assertEquals(0, directive.flag() & Directive.RPMFILE_ICON);
     }
 
-    public void testIconDirective() throws Exception
+    @Test
+    public void iconDirective() throws InvalidRpmPackageRuleDirectiveException
     {
         this.directiveList.add("icon");
         Directive directive = RpmPackageRuleDirective.newDirective(this.directiveList);
@@ -39,7 +47,8 @@ public class RpmPackageRuleDirectiveTest extends TestCase
         assertEquals(0, directive.flag() & Directive.RPMFILE_MISSINGOK);
     }
 
-    public void testMissingOkDirective() throws Exception
+    @Test
+    public void missingOkDirective() throws InvalidRpmPackageRuleDirectiveException
     {
         this.directiveList.add("missingok");
         Directive directive = RpmPackageRuleDirective.newDirective(this.directiveList);
@@ -47,7 +56,8 @@ public class RpmPackageRuleDirectiveTest extends TestCase
         assertEquals(0, directive.flag() & Directive.RPMFILE_NOREPLACE);
     }
 
-    public void testNoReplaceDirective() throws Exception
+    @Test
+    public void noReplaceDirective() throws InvalidRpmPackageRuleDirectiveException
     {
         this.directiveList.add("noreplace");
         Directive directive = RpmPackageRuleDirective.newDirective(this.directiveList);
@@ -55,7 +65,8 @@ public class RpmPackageRuleDirectiveTest extends TestCase
         assertEquals(0, directive.flag() & Directive.RPMFILE_SPECFILE);
     }
 
-    public void testSpecFileDirective() throws Exception
+    @Test
+    public void specFileDirective() throws InvalidRpmPackageRuleDirectiveException
     {
         this.directiveList.add("specfile");
         Directive directive = RpmPackageRuleDirective.newDirective(this.directiveList);
@@ -63,7 +74,8 @@ public class RpmPackageRuleDirectiveTest extends TestCase
         assertEquals(0, directive.flag() & Directive.RPMFILE_GHOST);
     }
 
-    public void testGhostDirective() throws Exception
+    @Test
+    public void ghostDirective() throws InvalidRpmPackageRuleDirectiveException
     {
         this.directiveList.add("ghost");
         Directive directive = RpmPackageRuleDirective.newDirective(this.directiveList);
@@ -71,7 +83,8 @@ public class RpmPackageRuleDirectiveTest extends TestCase
         assertEquals(0, directive.flag() & Directive.RPMFILE_LICENSE);
     }
 
-    public void testLicenseDirective() throws Exception
+    @Test
+    public void licenseDirective() throws InvalidRpmPackageRuleDirectiveException
     {
         this.directiveList.add("license");
         Directive directive = RpmPackageRuleDirective.newDirective(this.directiveList);
@@ -79,7 +92,8 @@ public class RpmPackageRuleDirectiveTest extends TestCase
         assertEquals(0, directive.flag() & Directive.RPMFILE_README);
     }
 
-    public void testReadmeDirective() throws Exception
+    @Test
+    public void readmeDirective() throws InvalidRpmPackageRuleDirectiveException
     {
         this.directiveList.add("readme");
         Directive directive = RpmPackageRuleDirective.newDirective(this.directiveList);
@@ -87,7 +101,8 @@ public class RpmPackageRuleDirectiveTest extends TestCase
         assertEquals(0, directive.flag() & Directive.RPMFILE_UNPATCHED);
     }
 
-    public void testUnpatchedDirective() throws Exception
+    @Test
+    public void unpatchedDirective() throws InvalidRpmPackageRuleDirectiveException
     {
         this.directiveList.add("unpatched");
         Directive directive = RpmPackageRuleDirective.newDirective(this.directiveList);
@@ -95,7 +110,8 @@ public class RpmPackageRuleDirectiveTest extends TestCase
         assertEquals(0, directive.flag() & Directive.RPMFILE_PUBKEY);
     }
 
-    public void testPubkeyDirective() throws Exception
+    @Test
+    public void pubkeyDirective() throws InvalidRpmPackageRuleDirectiveException
     {
         this.directiveList.add("pubkey");
         Directive directive = RpmPackageRuleDirective.newDirective(this.directiveList);
@@ -103,7 +119,8 @@ public class RpmPackageRuleDirectiveTest extends TestCase
         assertEquals(0, directive.flag() & Directive.RPMFILE_POLICY);
     }
 
-    public void testPolicyDirective() throws Exception
+    @Test
+    public void policyDirective() throws InvalidRpmPackageRuleDirectiveException
     {
         this.directiveList.add("policy");
         Directive directive = RpmPackageRuleDirective.newDirective(this.directiveList);
@@ -111,7 +128,8 @@ public class RpmPackageRuleDirectiveTest extends TestCase
         assertEquals(0, directive.flag() & Directive.RPMFILE_DOC);
     }
 
-    public void testMultipleDirectives() throws Exception
+    @Test
+    public void multipleDirectives() throws InvalidRpmPackageRuleDirectiveException
     {
         this.directiveList.add("config");
         this.directiveList.add("noreplace");
@@ -130,19 +148,10 @@ public class RpmPackageRuleDirectiveTest extends TestCase
         assertEquals(0, directive.flag() & Directive.RPMFILE_DOC);
     }
 
-    public void testInvalidDirective() throws Exception
+    @Test(expected = InvalidRpmPackageRuleDirectiveException.class)
+    public void invalidDirective() throws InvalidRpmPackageRuleDirectiveException
     {
         this.directiveList.add("invalid");
-        boolean exceptionThrown = false;
-
-        try {
-            RpmPackageRuleDirective.newDirective(this.directiveList);
-        }
-        catch(InvalidRpmPackageRuleDirectiveException ex)
-        {
-            exceptionThrown = true;
-        }
-
-        assertEquals(true, exceptionThrown);
+        RpmPackageRuleDirective.newDirective(this.directiveList);
     }
 }

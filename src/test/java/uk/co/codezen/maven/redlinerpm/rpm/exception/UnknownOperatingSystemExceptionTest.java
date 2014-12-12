@@ -1,10 +1,12 @@
 package uk.co.codezen.maven.redlinerpm.rpm.exception;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
-public class UnknownOperatingSystemExceptionTest extends TestCase
+public class UnknownOperatingSystemExceptionTest
 {
-    public void testException()
+    @Test
+    public void exception()
     {
         UnknownOperatingSystemException ex
                 = new UnknownOperatingSystemException("unknown");

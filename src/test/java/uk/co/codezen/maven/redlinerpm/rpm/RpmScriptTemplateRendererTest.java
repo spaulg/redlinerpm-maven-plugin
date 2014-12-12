@@ -1,14 +1,17 @@
 package uk.co.codezen.maven.redlinerpm.rpm;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileReader;
 import java.net.URL;
 
-public class RpmScriptTemplateRendererTest extends TestCase
+import org.junit.Test;
+
+public class RpmScriptTemplateRendererTest
 {
-    public void testRender() throws Exception
+    @Test
+    public void render() throws Exception
     {
         ClassLoader cl = this.getClass().getClassLoader();
         URL templateResource = cl.getResource("unit/uk/co/codezen/maven/redlinerpm/rpm/RpmScriptTemplateRenderer-template");

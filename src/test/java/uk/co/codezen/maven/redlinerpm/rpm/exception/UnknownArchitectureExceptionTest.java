@@ -1,10 +1,12 @@
 package uk.co.codezen.maven.redlinerpm.rpm.exception;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
-public class UnknownArchitectureExceptionTest extends TestCase
+public class UnknownArchitectureExceptionTest
 {
-    public void testException()
+    @Test
+    public void exception()
     {
         UnknownArchitectureException ex
                 = new UnknownArchitectureException("unknown");

@@ -1,6 +1,7 @@
 package uk.co.codezen.maven.redlinerpm.rpm;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
+
 import org.apache.maven.project.MavenProject;
 import org.redline_rpm.header.Architecture;
 import org.redline_rpm.header.Os;
@@ -8,14 +9,18 @@ import uk.co.codezen.maven.redlinerpm.mojo.PackageRpmMojo;
 import uk.co.codezen.maven.redlinerpm.rpm.exception.UnknownArchitectureException;
 import uk.co.codezen.maven.redlinerpm.rpm.exception.UnknownOperatingSystemException;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RpmPackageTest extends TestCase
+public class RpmPackageTest
 {
     private RpmPackage rpmPackage;
 
+    @Before
     public void setUp()
     {
         this.rpmPackage = new RpmPackage();
@@ -30,14 +35,16 @@ public class RpmPackageTest extends TestCase
         this.rpmPackage.setMojo(mojo);
     }
 
-    public void testNameAccessors()
+    @Test
+    public void nameAccessors()
     {
         assertEquals("test-artifact", this.rpmPackage.getName());
         this.rpmPackage.setName("name");
         assertEquals("name", this.rpmPackage.getName());
     }
 
-    public void testVersionAccessors()
+    @Test
+    public void versionAccessors()
     {
         assertEquals("1.0", this.rpmPackage.getVersion());
         assertEquals("1.0", this.rpmPackage.getProjectVersion());
@@ -58,14 +65,16 @@ public class RpmPackageTest extends TestCase
         assertEquals("1.0", this.rpmPackage.getProjectVersion());
     }
 
-    public void testReleaseAccessors()
+    @Test
+    public void releaseAccessors()
     {
         assertTrue(this.rpmPackage.getRelease().matches("\\d+"));
         this.rpmPackage.setRelease("release");
         assertEquals("release", this.rpmPackage.getRelease());
     }
 
-    public void testFinalNameAccessors()
+    @Test
+    public void finalNameAccessors()
     {
         this.rpmPackage.setName("name");
         this.rpmPackage.setVersion("1.0-SNAPSHOT");
@@ -76,7 +85,8 @@ public class RpmPackageTest extends TestCase
         assertEquals("finalname", this.rpmPackage.getFinalName());
     }
 
-    public void testDependenciesAccessors()
+    @Test
+    public void dependenciesAccessors()
     {
         List<RpmPackageAssociation> dependencies = new ArrayList<RpmPackageAssociation>();
 
@@ -85,7 +95,8 @@ public class RpmPackageTest extends TestCase
         assertEquals(dependencies, this.rpmPackage.getDependencies());
     }
 
-    public void testObsoletesAccessors()
+    @Test
+    public void obsoletesAccessors()
     {
         List<RpmPackageAssociation> obsoletes = new ArrayList<RpmPackageAssociation>();
 
@@ -94,7 +105,8 @@ public class RpmPackageTest extends TestCase
         assertEquals(obsoletes, this.rpmPackage.getObsoletes());
     }
 
-    public void testConflictsAccessors()
+    @Test
+    public void conflictsAccessors()
     {
         List<RpmPackageAssociation> conflicts = new ArrayList<RpmPackageAssociation>();
 
@@ -103,153 +115,140 @@ public class RpmPackageTest extends TestCase
         assertEquals(conflicts, this.rpmPackage.getConflicts());
     }
 
-    public void testUrlAccessors()
+    @Test
+    public void urlAccessors()
     {
         assertEquals(null, this.rpmPackage.getUrl());
         this.rpmPackage.setUrl("http://www.example.com/foo");
         assertEquals("http://www.example.com/foo", this.rpmPackage.getUrl());
     }
 
-    public void testGroupAccessors()
+    @Test
+    public void groupAccessors()
     {
         assertEquals(null, this.rpmPackage.getGroup());
         this.rpmPackage.setGroup("group/subgroup");
         assertEquals("group/subgroup", this.rpmPackage.getGroup());
     }
 
-    public void testLicenseAccessors()
+    @Test
+    public void licenseAccessors()
     {
         assertEquals(null, this.rpmPackage.getLicense());
         this.rpmPackage.setLicense("license");
         assertEquals("license", this.rpmPackage.getLicense());
     }
 
-    public void testSummaryAccessors()
+    @Test
+    public void summaryAccessors()
     {
         assertEquals(null, this.rpmPackage.getSummary());
         this.rpmPackage.setSummary("summary");
         assertEquals("summary", this.rpmPackage.getSummary());
     }
 
-    public void testDescriptionAccessors()
+    @Test
+    public void descriptionAccessors()
     {
         assertEquals(null, this.rpmPackage.getDescription());
         this.rpmPackage.setDescription("description");
         assertEquals("description", this.rpmPackage.getDescription());
     }
 
-    public void testDistributionAccessors()
+    @Test
+    public void distributionAccessors()
     {
         assertEquals(null, this.rpmPackage.getDistribution());
         this.rpmPackage.setDistribution("distribution");
         assertEquals("distribution", this.rpmPackage.getDistribution());
     }
 
-    public void testArchitectureAccessors() throws Exception
+    @Test
+    public void architectureAccessors() throws UnknownArchitectureException
     {
-        boolean exceptionRaised;
         assertEquals(Architecture.NOARCH, this.rpmPackage.getArchitecture());
         this.rpmPackage.setArchitecture("SPARC");
         assertEquals(Architecture.SPARC, this.rpmPackage.getArchitecture());
-
-        try {
-            exceptionRaised = false;
-            this.rpmPackage.setArchitecture("NONEXISTENT");
-        }
-        catch(UnknownArchitectureException ex) {
-            exceptionRaised = true;
-        }
-
-        assertEquals(true, exceptionRaised);
-
-        try {
-            exceptionRaised = false;
-            this.rpmPackage.setArchitecture("");
-        }
-        catch(UnknownArchitectureException ex) {
-            exceptionRaised = true;
-        }
-
-        assertEquals(true, exceptionRaised);
-
-        try {
-            exceptionRaised = false;
-            this.rpmPackage.setArchitecture(null);
-        }
-        catch(UnknownArchitectureException ex) {
-            exceptionRaised = true;
-        }
-
-        assertEquals(true, exceptionRaised);
     }
 
-    public void testOperatingSystemAccessors() throws Exception
+    @Test(expected = UnknownArchitectureException.class)
+    public void architectureInvalidException() throws UnknownArchitectureException
     {
-        boolean exceptionRaised;
+        this.rpmPackage.setArchitecture("NONEXISTENT");
+    }
+
+    @Test(expected = UnknownArchitectureException.class)
+    public void architectureBlankException() throws UnknownArchitectureException
+    {
+        this.rpmPackage.setArchitecture("");
+    }
+
+    @Test(expected = UnknownArchitectureException.class)
+    public void architectureNullException() throws UnknownArchitectureException
+    {
+        this.rpmPackage.setArchitecture(null);
+    }
+
+    @Test
+    public void operatingSystemAccessors() throws UnknownOperatingSystemException
+    {
         assertEquals(Os.LINUX, this.rpmPackage.getOperatingSystem());
         this.rpmPackage.setOperatingSystem("LINUX390");
         assertEquals(Os.LINUX390, this.rpmPackage.getOperatingSystem());
-
-        try {
-            exceptionRaised = false;
-            this.rpmPackage.setOperatingSystem("NONEXISTENT");
-        }
-        catch(UnknownOperatingSystemException ex) {
-            exceptionRaised = true;
-        }
-
-        assertEquals(true, exceptionRaised);
-
-        try {
-            exceptionRaised = false;
-            this.rpmPackage.setOperatingSystem("");
-        }
-        catch(UnknownOperatingSystemException ex) {
-            exceptionRaised = true;
-        }
-
-        assertEquals(true, exceptionRaised);
-
-        try {
-            exceptionRaised = false;
-            this.rpmPackage.setOperatingSystem(null);
-        }
-        catch(UnknownOperatingSystemException ex) {
-            exceptionRaised = true;
-        }
-
-        assertEquals(true, exceptionRaised);
     }
 
-    public void testBuildHostNameAccessors() throws Exception
+    @Test(expected = UnknownOperatingSystemException.class)
+    public void operatingSystemInvalidException() throws UnknownOperatingSystemException
+    {
+        this.rpmPackage.setOperatingSystem("NONEXISTENT");
+    }
+
+    @Test(expected = UnknownOperatingSystemException.class)
+    public void operatingSystemBlankException() throws UnknownOperatingSystemException
+    {
+        this.rpmPackage.setOperatingSystem("");
+    }
+
+    @Test(expected = UnknownOperatingSystemException.class)
+    public void operatingSystemNullException() throws UnknownOperatingSystemException
+    {
+        this.rpmPackage.setOperatingSystem(null);
+    }
+
+    @Test
+    public void buildHostNameAccessors() throws Exception
     {
         assertNotNull(this.rpmPackage.getBuildHostName());
         this.rpmPackage.setBuildHostName("buildhost");
         assertEquals("buildhost", this.rpmPackage.getBuildHostName());
     }
 
-    public void testPackagerAccessors()
+    @Test
+    public void packagerAccessors()
     {
         assertEquals(null, this.rpmPackage.getPackager());
         this.rpmPackage.setPackager("packager");
         assertEquals("packager", this.rpmPackage.getPackager());
     }
 
-    public void testAttachAccessors()
+    @Test
+    public void attachAccessors()
     {
         assertEquals(true, this.rpmPackage.isAttach());
         this.rpmPackage.setAttach(false);
         assertEquals(false, this.rpmPackage.isAttach());
     }
 
-    public void testClassifierAccessors()
+    @Test
+    public void classifierAccessors()
     {
         assertEquals(null, this.rpmPackage.getClassifier());
         this.rpmPackage.setClassifier("classifier");
         assertEquals("classifier", this.rpmPackage.getClassifier());
     }
 
-    public void testRulesAccessors()
+    @Test
+    public void rulesAccessors()
     {
         List<RpmPackageRule> rules = new ArrayList<RpmPackageRule>();
         rules.add(new RpmPackageRule());
@@ -262,7 +261,8 @@ public class RpmPackageTest extends TestCase
         assertNull(this.rpmPackage.getRules());
     }
 
-    public void testEventHookAccessors()
+    @Test
+    public void eventHookAccessors()
     {
         File scriptFile = new File("samplescript.sh");
 
@@ -327,7 +327,8 @@ public class RpmPackageTest extends TestCase
         assertEquals("/bin/sh", this.rpmPackage.getPostTransactionProgram());
     }
 
-    public void testTriggerAccessors()
+    @Test
+    public void triggerAccessors()
     {
         List<RpmTrigger> triggers = new ArrayList<RpmTrigger>();
 
@@ -336,7 +337,8 @@ public class RpmPackageTest extends TestCase
         assertEquals(triggers, this.rpmPackage.getTriggers());
     }
 
-    public void testSigningKeyAccessors()
+    @Test
+    public void signingKeyAccessors()
     {
         assertEquals(null, this.rpmPackage.getSigningKey());
         this.rpmPackage.setSigningKey("key");
@@ -351,7 +353,8 @@ public class RpmPackageTest extends TestCase
         assertEquals("passphrase", this.rpmPackage.getSigningKeyPassPhrase());
     }
 
-    public void testPrefixesAccessors()
+    @Test
+    public void prefixesAccessors()
     {
         List<String> prefixes = new ArrayList<String>();
 

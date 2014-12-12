@@ -1,13 +1,16 @@
 package uk.co.codezen.maven.redlinerpm.rpm;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RpmTriggerTest extends TestCase
+import org.junit.Test;
+
+public class RpmTriggerTest
 {
-    public void testAccessors()
+    @Test
+    public void accessors()
     {
         List<RpmPackageAssociation> dependencies = new ArrayList<RpmPackageAssociation>();
         RpmTrigger trigger = new RpmTrigger();

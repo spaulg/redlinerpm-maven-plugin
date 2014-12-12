@@ -1,11 +1,14 @@
 package uk.co.codezen.maven.redlinerpm.rpm;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 import org.apache.tools.ant.DirectoryScanner;
 
-public class DirectoryScannerFactoryTest extends TestCase
+import org.junit.Test;
+
+public class DirectoryScannerFactoryTest
 {
-    public void testFactory()
+    @Test
+    public void factory()
     {
         String[] includes = {"foo", "bar"};
         String[] excludes = {"baz"};

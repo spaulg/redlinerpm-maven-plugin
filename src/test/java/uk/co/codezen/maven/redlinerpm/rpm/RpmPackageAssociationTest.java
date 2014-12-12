@@ -1,31 +1,38 @@
 package uk.co.codezen.maven.redlinerpm.rpm;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
 
-public class RpmPackageAssociationTest extends TestCase
+import org.junit.Before;
+import org.junit.Test;
+
+public class RpmPackageAssociationTest
 {
     private RpmPackageAssociation association;
 
+    @Before
     public void setUp()
     {
         association = new RpmPackageAssociation();
     }
 
-    public void testNameAccessors()
+    @Test
+    public void nameAccessors()
     {
         assertEquals(null, this.association.getName());
         this.association.setName("testname");
         assertEquals("testname", this.association.getName());
     }
 
-    public void testUnassignedVersion()
+    @Test
+    public void unassignedVersion()
     {
         assertEquals(null, this.association.getVersion());
         assertEquals(null, this.association.getMinVersion());
         assertEquals(null, this.association.getMaxVersion());
     }
 
-    public void testLatestVersion()
+    @Test
+    public void latestVersion()
     {
         this.association.setVersion(null);
         assertEquals(null, this.association.getVersion());
@@ -43,7 +50,8 @@ public class RpmPackageAssociationTest extends TestCase
         assertEquals(null, this.association.getMaxVersion());
     }
 
-    public void testSpecificVersion()
+    @Test
+    public void specificVersion()
     {
         this.association.setVersion("1.2.3");
         assertEquals("1.2.3", this.association.getVersion());
@@ -51,7 +59,8 @@ public class RpmPackageAssociationTest extends TestCase
         assertEquals(null, this.association.getMaxVersion());
     }
 
-    public void testMinVersionRange()
+    @Test
+    public void minVersionRange()
     {
         this.association.setVersion("[1.2.3,)");
         assertEquals(null, this.association.getVersion());
@@ -59,7 +68,8 @@ public class RpmPackageAssociationTest extends TestCase
         assertEquals(null, this.association.getMaxVersion());
     }
 
-    public void testMaxVersionRange()
+    @Test
+    public void maxVersionRange()
     {
         this.association.setVersion("[,1.2.3)");
         assertEquals(null, this.association.getVersion());
@@ -67,7 +77,8 @@ public class RpmPackageAssociationTest extends TestCase
         assertEquals("1.2.3", this.association.getMaxVersion());
     }
 
-    public void testMinMaxVersionRange()
+    @Test
+    public void minMaxVersionRange()
     {
         this.association.setVersion("[1.2.3,1.2.5)");
         assertEquals(null, this.association.getVersion());

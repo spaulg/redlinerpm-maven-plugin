@@ -1,10 +1,12 @@
 package uk.co.codezen.maven.redlinerpm.rpm.exception;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
-public class DuplicateRpmArtifactExceptionTest extends TestCase
+public class DuplicateRpmArtifactExceptionTest
 {
-    public void testException()
+    @Test
+    public void exception()
     {
         DuplicateRpmArtifactException exception = new DuplicateRpmArtifactException("artifact");
         assertEquals("The RPM artifact artifact already exists.", exception.getMessage());

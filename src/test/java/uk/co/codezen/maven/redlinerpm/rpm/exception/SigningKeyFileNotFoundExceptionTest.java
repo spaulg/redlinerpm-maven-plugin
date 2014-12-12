@@ -1,9 +1,11 @@
 package uk.co.codezen.maven.redlinerpm.rpm.exception;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
-public class SigningKeyFileNotFoundExceptionTest extends TestCase
+public class SigningKeyFileNotFoundExceptionTest
 {
+    @Test
     public void testException()
     {
         SigningKeyFileNotFoundException exception = new SigningKeyFileNotFoundException("keyfile");
