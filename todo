@@ -1,7 +1,4 @@
 1.  Default summary from pom name attribute
 2.  Default description from pom description attribute
 3.  Default the operating system based on os.name Java parameter.
-
-
 4.  Support SELinux contexts?
-5.  Allow event hooks to be parsed for expression language.
