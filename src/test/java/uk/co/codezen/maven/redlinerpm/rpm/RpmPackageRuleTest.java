@@ -23,9 +23,12 @@ import org.apache.maven.monitor.logging.DefaultLog;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
+import org.redline_rpm.Builder;
 import org.redline_rpm.payload.Directive;
+import uk.co.codezen.maven.redlinerpm.mocks.MockBuilder;
 import uk.co.codezen.maven.redlinerpm.mojo.PackageRpmMojo;
 import uk.co.codezen.maven.redlinerpm.rpm.exception.AbstractRpmException;
+import uk.co.codezen.maven.redlinerpm.rpm.exception.CanonicalScanPathOutsideBuildPathException;
 import uk.co.codezen.maven.redlinerpm.rpm.exception.InvalidPathException;
 import uk.co.codezen.maven.redlinerpm.rpm.exception.InvalidRpmPackageRuleDirectiveException;
 
@@ -33,6 +36,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -209,13 +214,30 @@ public class RpmPackageRuleTest
         assertEquals(65, files.length);
     }
 
-    @Test
+    @Test(expected = CanonicalScanPathOutsideBuildPathException.class)
     public void testListFilesOutsideBuildPath() throws AbstractRpmException
     {
         this.rpmFileRule.setBase("../");
         System.out.println(this.rpmFileRule.getScanPath());
-//        this.rpmFileRule.listFiles();
+        this.rpmFileRule.listFiles();
     }
 
-    // todo: add something for addFiles
+    @Test
+    public void testAddFiles() throws NoSuchAlgorithmException, IOException, AbstractRpmException
+    {
+        MockBuilder builder = new MockBuilder();
+
+        List<String> includes = new ArrayList<String>();
+        includes.add("**");
+
+        List<String> excludes = new ArrayList<String>();
+        excludes.add("composer.*");
+
+        this.rpmFileRule.setIncludes(includes);
+        this.rpmFileRule.setExcludes(excludes);
+
+        String[] files = this.rpmFileRule.addFiles(builder);
+        assertEquals(65, files.length);
+        assertEquals(95, builder.getContents().size()); // includes directories
+    }
 }

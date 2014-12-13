@@ -355,7 +355,7 @@ final public class RpmPackageRule
         String scanPath = this.getScanPath();
 
         // Confirm the scan path is still within the build path
-        if ( ! scanPath.startsWith(buildPath)) {
+        if ( ! scanPath.startsWith(String.format("%s%s", buildPath, File.separator))) {
             throw new CanonicalScanPathOutsideBuildPathException(scanPath, buildPath);
         }
 
