@@ -19,6 +19,7 @@ package uk.co.codezen.maven.redlinerpm.mojo;
 
 import org.apache.maven.plugin.logging.Log;
 import uk.co.codezen.maven.redlinerpm.rpm.RpmScriptTemplateRenderer;
+import uk.co.codezen.maven.redlinerpm.rpm.exception.InvalidPathException;
 
 import java.io.File;
 
@@ -92,7 +93,7 @@ public interface RpmMojo
      *
      * @return Build root path
      */
-    public String getBuildPath();
+    public String getBuildPath() throws InvalidPathException;
 
     /**
      * Get default mode

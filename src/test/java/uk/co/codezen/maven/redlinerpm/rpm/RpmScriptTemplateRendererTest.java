@@ -4,26 +4,30 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileReader;
-import java.net.URL;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class RpmScriptTemplateRendererTest
 {
+    String testOutputPath;
+
+    @Before
+    public void setUp()
+    {
+        // Test output path
+        this.testOutputPath = System.getProperty("project.build.testOutputDirectory");
+    }
+
     @Test
     public void render() throws Exception
     {
-        ClassLoader cl = this.getClass().getClassLoader();
-        URL templateResource = cl.getResource("unit/uk/co/codezen/maven/redlinerpm/rpm/RpmScriptTemplateRenderer-template");
-        URL expectedResource = cl.getResource("unit/uk/co/codezen/maven/redlinerpm/rpm/RpmScriptTemplateRenderer-template-expected");
-
-        if (null == templateResource || null == expectedResource) {
-            throw new Exception("Failed to find template or expected template resources");
-        }
-
-        File templateScriptFile = new File(templateResource.getPath());
-        File expectedScriptFile = new File(expectedResource.getPath());
-        File actualScriptFile = new File(templateScriptFile.getParent() + File.separator + "RpmScriptTemplateRenderer-template-actual");
+        File templateScriptFile = new File(
+                String.format("%s/unit/uk/co/codezen/maven/redlinerpm/rpm/RpmScriptTemplateRenderer-template", this.testOutputPath));
+        File expectedScriptFile = new File(
+                String.format("%s/unit/uk/co/codezen/maven/redlinerpm/rpm/RpmScriptTemplateRenderer-template-expected", this.testOutputPath));
+        File actualScriptFile = new File(
+                String.format("%s/unit/uk/co/codezen/maven/redlinerpm/rpm/RpmScriptTemplateRenderer-template-actual", this.testOutputPath));
 
         RpmScriptTemplateRenderer renderer = new RpmScriptTemplateRenderer();
         renderer.addParameter("testdata1", true);

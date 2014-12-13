@@ -25,68 +25,64 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.redline_rpm.payload.Directive;
 import uk.co.codezen.maven.redlinerpm.mojo.PackageRpmMojo;
+import uk.co.codezen.maven.redlinerpm.rpm.exception.AbstractRpmException;
+import uk.co.codezen.maven.redlinerpm.rpm.exception.InvalidPathException;
 import uk.co.codezen.maven.redlinerpm.rpm.exception.InvalidRpmPackageRuleDirectiveException;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RpmPackageRuleTest
 {
-    private RpmPackageRule rpmFileRule;
-    private RpmPackage rpmPackage;
-    private List<String> includes;
-    private List<String> excludes;
-    private List<String> directives;
+    String testOutputPath;
+
     private Log log;
 
-    String resourcePath;
+    private RpmPackageRule rpmFileRule;
+    private RpmPackage rpmPackage;
 
     @Before
     public void setUp() throws Exception
     {
-        ClassLoader cl = this.getClass().getClassLoader();
+        // Test output path
+        this.testOutputPath = System.getProperty("project.build.testOutputDirectory");
 
-        URL buildReadmeResource = cl.getResource("build/README.md");
-
-        if (null == buildReadmeResource) {
-            throw new Exception("build/README.md resource could not be found");
-        }
-
-        resourcePath = new File(buildReadmeResource.getPath()).getParent();
-
-        this.log = new DefaultLog(new ConsoleLogger());
-
-        MavenProject mavenProject = new MavenProject();
+        // Create mojo
         PackageRpmMojo mojo = new PackageRpmMojo();
-        mojo.setProject(mavenProject);
         mojo.setDefaultFileMode(0644);
         mojo.setDefaultOwner("root");
         mojo.setDefaultGroup("root");
         mojo.setDefaultDestination("/var/www/test");
-        mojo.setLog(this.log);
-        mojo.setBuildPath(resourcePath);
+        mojo.setBuildPath(testOutputPath);
 
+        // Empty maven project is required
+        MavenProject mavenProject = new MavenProject();
+        mojo.setProject(mavenProject);
+
+        // Mojo logger
+        this.log = new DefaultLog(new ConsoleLogger());
+        mojo.setLog(this.log);
+
+        // RPM package
         this.rpmPackage = new RpmPackage();
         this.rpmPackage.setMojo(mojo);
 
+        // RPM package rule
         this.rpmFileRule = new RpmPackageRule();
         this.rpmFileRule.setPackage(rpmPackage);
-
-        this.includes = new ArrayList<String>();
-        this.excludes = new ArrayList<String>();
-        this.directives = new ArrayList<String>();
-
-        directives.add("noreplace");
+        this.rpmFileRule.setBase("build");
     }
 
     @Test
     public void directiveAccessors() throws InvalidRpmPackageRuleDirectiveException
     {
+        List<String> directives = new ArrayList<String>();
+        directives.add("noreplace");
+
         this.rpmFileRule.setDirectives(directives);
         assertEquals(Directive.class, this.rpmFileRule.getDirectives().getClass());
     }
@@ -107,10 +103,7 @@ public class RpmPackageRuleTest
         assertEquals("/", this.rpmFileRule.getBase());
 
         this.rpmFileRule.setBase("/foo");
-        assertEquals("/foo/", this.rpmFileRule.getBase());
-
-        this.rpmFileRule.setBase("/bar/");
-        assertEquals("/bar/", this.rpmFileRule.getBase());
+        assertEquals("/foo", this.rpmFileRule.getBase());
     }
 
     @Test
@@ -122,15 +115,11 @@ public class RpmPackageRuleTest
         this.rpmFileRule.setDestination(null);
         assertEquals(null, this.rpmFileRule.getDestination());
 
-        assertEquals("/var/www/test/", this.rpmFileRule.getDestinationOrDefault());
+        assertEquals("/var/www/test", this.rpmFileRule.getDestinationOrDefault());
 
         this.rpmFileRule.setDestination("/foo");
-        assertEquals("/foo/", this.rpmFileRule.getDestination());
-        assertEquals("/foo/", this.rpmFileRule.getDestinationOrDefault());
-
-        this.rpmFileRule.setDestination("/bar/");
-        assertEquals("/bar/", this.rpmFileRule.getDestination());
-        assertEquals("/bar/", this.rpmFileRule.getDestinationOrDefault());
+        assertEquals("/foo", this.rpmFileRule.getDestination());
+        assertEquals("/foo", this.rpmFileRule.getDestinationOrDefault());
     }
 
     @Test
@@ -178,6 +167,7 @@ public class RpmPackageRuleTest
     @Test
     public void includeAccessors()
     {
+        List<String> includes = new ArrayList<String>();
         this.rpmFileRule.setIncludes(includes);
         assertEquals(includes, this.rpmFileRule.getIncludes());
     }
@@ -185,6 +175,7 @@ public class RpmPackageRuleTest
     @Test
     public void excludeAccessors()
     {
+        List<String> excludes = new ArrayList<String>();
         this.rpmFileRule.setExcludes(excludes);
         assertEquals(excludes, this.rpmFileRule.getExcludes());
     }
@@ -195,18 +186,35 @@ public class RpmPackageRuleTest
         assertEquals(this.log, this.rpmFileRule.getLog());
     }
 
-//    @Test
-//    public void scanPathAccessor()
-//    {
-//        String scanPath = new File("target/classes").getAbsolutePath() + "/";
-//        this.rpmFileRule.setBase("classes");
-//        assertEquals(scanPath, this.rpmFileRule.getScanPath());
-//    }
+    @Test
+    public void scanPathAccessor() throws InvalidPathException
+    {
+        String scanPath = String.format("%s/build", new File(this.testOutputPath).getAbsolutePath());
+        assertEquals(scanPath, this.rpmFileRule.getScanPath());
+    }
 
     @Test
-    public void testListFiles() throws Exception
+    public void testListFiles() throws AbstractRpmException
     {
+        List<String> includes = new ArrayList<String>();
+        includes.add("**");
+
+        List<String> excludes = new ArrayList<String>();
+        excludes.add("composer.*");
+
+        this.rpmFileRule.setIncludes(includes);
+        this.rpmFileRule.setExcludes(excludes);
+
         String[] files = this.rpmFileRule.listFiles();
+        assertEquals(65, files.length);
+    }
+
+    @Test
+    public void testListFilesOutsideBuildPath() throws AbstractRpmException
+    {
+        this.rpmFileRule.setBase("../");
+        System.out.println(this.rpmFileRule.getScanPath());
+//        this.rpmFileRule.listFiles();
     }
 
     // todo: add something for addFiles

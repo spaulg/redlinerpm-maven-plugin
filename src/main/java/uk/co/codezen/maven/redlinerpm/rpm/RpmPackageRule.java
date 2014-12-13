@@ -23,8 +23,9 @@ import org.redline_rpm.Builder;
 import org.redline_rpm.payload.Directive;
 
 import uk.co.codezen.maven.redlinerpm.mojo.RpmMojo;
-import uk.co.codezen.maven.redlinerpm.rpm.exception.AbsoluteScanPathOutsideBuildPathException;
+import uk.co.codezen.maven.redlinerpm.rpm.exception.CanonicalScanPathOutsideBuildPathException;
 import uk.co.codezen.maven.redlinerpm.rpm.exception.AbstractRpmException;
+import uk.co.codezen.maven.redlinerpm.rpm.exception.InvalidPathException;
 import uk.co.codezen.maven.redlinerpm.rpm.exception.InvalidRpmPackageRuleDirectiveException;
 
 import java.io.File;
@@ -115,11 +116,6 @@ final public class RpmPackageRule
             base = File.separator;
         }
 
-        // Sanity check to always end with a /
-        if ( ! base.endsWith(File.separator)) {
-            base += File.separator;
-        }
-
         this.base = base;
     }
 
@@ -142,11 +138,6 @@ final public class RpmPackageRule
     {
         if (null != destination && destination.equals("")) {
             destination = null;
-        }
-
-        // Sanity check to always end with a directory separator
-        if (null != destination && ! destination.endsWith(File.separator)) {
-            destination += File.separator;
         }
 
         this.destination = destination;
@@ -326,10 +317,16 @@ final public class RpmPackageRule
      *
      * @return Scan path
      */
-    public String getScanPath()
+    public String getScanPath() throws InvalidPathException
     {
-        RpmMojo mojo = this.rpmPackage.getMojo();
-        return new File(mojo.getBuildPath() + this.getBase()).getAbsolutePath() + File.separator;
+        String scanPath = String.format("%s%s%s", this.rpmPackage.getMojo().getBuildPath(), File.separator, this.getBase());
+
+        try {
+            return new File(scanPath).getCanonicalPath();
+        }
+        catch(IOException ex) {
+            throw new InvalidPathException(scanPath, ex);
+        }
     }
 
     /**
@@ -352,12 +349,14 @@ final public class RpmPackageRule
     {
         // Build base path
         RpmMojo mojo = this.rpmPackage.getMojo();
-        String buildPath = new File(mojo.getBuildPath()).getAbsolutePath();
+
+        // Get build path & scan paths
+        String buildPath = mojo.getBuildPath();
         String scanPath = this.getScanPath();
 
         // Confirm the scan path is still within the build path
         if ( ! scanPath.startsWith(buildPath)) {
-            throw new AbsoluteScanPathOutsideBuildPathException(scanPath, buildPath);
+            throw new CanonicalScanPathOutsideBuildPathException(scanPath, buildPath);
         }
 
         // Perform scan

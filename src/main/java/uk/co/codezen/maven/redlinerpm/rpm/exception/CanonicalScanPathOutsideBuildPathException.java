@@ -20,7 +20,7 @@ package uk.co.codezen.maven.redlinerpm.rpm.exception;
 /**
  * Scan path for discoverying files is not within a child path of the base build path
  */
-final public class AbsoluteScanPathOutsideBuildPathException extends AbstractRpmException
+final public class CanonicalScanPathOutsideBuildPathException extends AbstractRpmException
 {
     /**
      * Constructor
@@ -28,7 +28,7 @@ final public class AbsoluteScanPathOutsideBuildPathException extends AbstractRpm
      * @param scanPath Scan path
      * @param buildPath Build path
      */
-    public AbsoluteScanPathOutsideBuildPathException(String scanPath, String buildPath)
+    public CanonicalScanPathOutsideBuildPathException(String scanPath, String buildPath)
     {
         this.message = String.format("Scan path %s outside of build directory %s", scanPath, buildPath);
     }

@@ -29,8 +29,10 @@ import org.apache.tools.ant.DirectoryScanner;
 import uk.co.codezen.maven.redlinerpm.rpm.DirectoryScannerFactory;
 import uk.co.codezen.maven.redlinerpm.rpm.RpmScriptTemplateRenderer;
 import uk.co.codezen.maven.redlinerpm.rpm.RpmPackage;
+import uk.co.codezen.maven.redlinerpm.rpm.exception.InvalidPathException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -291,10 +293,6 @@ abstract public class AbstractRpmMojo extends AbstractMojo implements RpmMojo
      */
     public void setBuildPath(String buildPath)
     {
-        if (null != buildPath && ! buildPath.endsWith(File.separator)) {
-            buildPath += File.separator;
-        }
-
         this.buildPath = buildPath;
     }
 
@@ -304,9 +302,14 @@ abstract public class AbstractRpmMojo extends AbstractMojo implements RpmMojo
      * @return Build root path
      */
     @Override
-    public String getBuildPath()
+    public String getBuildPath() throws InvalidPathException
     {
-        return this.buildPath;
+        try {
+            return new File(this.buildPath).getCanonicalPath();
+        }
+        catch (IOException ex) {
+            throw new InvalidPathException(this.buildPath, ex);
+        }
     }
 
     /**
@@ -394,11 +397,6 @@ abstract public class AbstractRpmMojo extends AbstractMojo implements RpmMojo
      */
     public void setDefaultDestination(String defaultDestination)
     {
-        // Sanity check to always end with a /
-        if ( ! defaultDestination.endsWith(File.separator)) {
-            defaultDestination += File.separator;
-        }
-
         this.defaultDestination = defaultDestination;
     }
 

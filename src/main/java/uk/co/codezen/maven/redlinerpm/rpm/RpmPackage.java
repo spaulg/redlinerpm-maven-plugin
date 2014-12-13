@@ -1329,12 +1329,12 @@ final public class RpmPackage
             if (mojo.getProjectArtifactId().equals(this.getName())
                     && mojo.getProjectVersion().equals(this.getProjectVersion())) {
                 // Primary artifact
-                this.getLog().info(String.format("Attaching %s as primary artifact", packageFile.getAbsolutePath()));
+                this.getLog().info(String.format("Attaching %s as primary artifact", packageFile.getCanonicalPath()));
                 mojo.setPrimaryArtifact(packageFile, this.getClassifier());
             }
             else {
                 // Secondary artifact
-                this.getLog().info(String.format("Attaching %s as secondary artifact", packageFile.getAbsolutePath()));
+                this.getLog().info(String.format("Attaching %s as secondary artifact", packageFile.getCanonicalPath()));
                 mojo.addSecondaryArtifact(packageFile, this.getName(), this.getProjectVersion(), this.getClassifier());
             }
         }

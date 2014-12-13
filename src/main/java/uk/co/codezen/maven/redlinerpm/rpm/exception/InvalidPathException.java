@@ -18,39 +18,19 @@
 package uk.co.codezen.maven.redlinerpm.rpm.exception;
 
 /**
- * Abstract RPM exception
+ * Invalid path
  */
-abstract public class AbstractRpmException extends Exception
+final public class InvalidPathException extends AbstractRpmException
 {
     /**
-     * Exception message
-     */
-    protected String message;
-
-    /**
-     * Cause for exception
-     */
-    protected Throwable cause = null;
-
-    /**
-     * Get exception message
+     * Constructor
      *
-     * @return Exception message
+     * @param invalidPath Invalid path
+     * @param cause Exception cause
      */
-    @Override
-    public String getMessage()
+    public InvalidPathException(String invalidPath, Throwable cause)
     {
-        return this.message;
-    }
-
-    /**
-     * Get exception cause
-     *
-     * @return Exception cause
-     */
-    @Override
-    public Throwable getCause()
-    {
-        return this.cause;
+        this.message = String.format("Path %s is invalid, causing exception", invalidPath);
+        this.cause = cause;
     }
 }
