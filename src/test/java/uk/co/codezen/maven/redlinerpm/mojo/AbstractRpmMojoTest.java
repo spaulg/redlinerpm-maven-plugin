@@ -161,6 +161,7 @@ public class AbstractRpmMojoTest
         packages.add(new RpmPackage());
 
         this.mojo.setPackages(packages);
+        assertEquals(packages, this.mojo.getPackages());
     }
 
     @Test
@@ -188,6 +189,7 @@ public class AbstractRpmMojoTest
     {
         List<String> excludes = new ArrayList<String>();
         this.mojo.setExcludes(excludes);
+        assertEquals(excludes, this.mojo.getExcludes());
     }
 
     @Test
