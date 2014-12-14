@@ -23,7 +23,6 @@ import org.apache.maven.monitor.logging.DefaultLog;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
-import org.redline_rpm.Builder;
 import org.redline_rpm.payload.Directive;
 import uk.co.codezen.maven.redlinerpm.mocks.MockBuilder;
 import uk.co.codezen.maven.redlinerpm.mojo.PackageRpmMojo;

@@ -204,7 +204,7 @@ abstract public class AbstractRpmMojo extends AbstractMojo implements RpmMojo
                 collapsedLicenseList = license.getName();
             }
             else {
-                collapsedLicenseList += ", " + collapsedLicenseList;
+                collapsedLicenseList += ", " + license.getName();
             }
         }
 
@@ -219,15 +219,7 @@ abstract public class AbstractRpmMojo extends AbstractMojo implements RpmMojo
     @Override
     public String getBuildDirectory()
     {
-        String directory = this.project.getBuild().getDirectory();
-
-        if (null == directory) {
-            // Directory is not set, default to target
-            directory = "target";
-            this.project.getBuild().setDirectory(directory);
-        }
-
-        return directory;
+        return this.project.getBuild().getDirectory();
     }
 
     /**
