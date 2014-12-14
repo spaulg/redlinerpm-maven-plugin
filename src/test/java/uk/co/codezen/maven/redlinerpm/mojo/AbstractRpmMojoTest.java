@@ -4,10 +4,12 @@ import static org.junit.Assert.*;
 
 import org.apache.maven.model.Build;
 import org.apache.maven.model.License;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.junit.Before;
 import org.junit.Test;
 import uk.co.codezen.maven.redlinerpm.mocks.MockMojo;
+import uk.co.codezen.maven.redlinerpm.rpm.RpmPackage;
 import uk.co.codezen.maven.redlinerpm.rpm.RpmScriptTemplateRenderer;
 import uk.co.codezen.maven.redlinerpm.rpm.exception.InvalidPathException;
 
@@ -16,6 +18,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class AbstractRpmMojoTest
 {
@@ -154,27 +157,30 @@ public class AbstractRpmMojoTest
     @Test
     public void packages()
     {
-        /*
-        setPackages
-         */
+        List<RpmPackage> packages = new ArrayList<RpmPackage>();
+        packages.add(new RpmPackage());
+
+        this.mojo.setPackages(packages);
     }
 
     @Test
     public void defaults()
     {
-        /*
-        setDefaultFileMode
-        getDefaultFileMode
+        assertEquals(0644, this.mojo.getDefaultFileMode());
+        this.mojo.setDefaultFileMode(0755);
+        assertEquals(0755, this.mojo.getDefaultFileMode());
 
-        setDefaultOwner
-        getDefaultOwner
+        assertEquals("root", this.mojo.getDefaultOwner());
+        this.mojo.setDefaultOwner("nobody");
+        assertEquals("nobody", this.mojo.getDefaultOwner());
 
-        setDefaultGroup
-        getDefaultGroup
+        assertEquals("root", this.mojo.getDefaultGroup());
+        this.mojo.setDefaultGroup("nobody");
+        assertEquals("nobody", this.mojo.getDefaultGroup());
 
-        getDefaultDestination
-        setDefaultDestination
-         */
+        assertEquals(File.separator, this.mojo.getDefaultDestination());
+        this.mojo.setDefaultDestination(String.format("%sdestination", File.separator));
+        assertEquals(String.format("%sdestination", File.separator), this.mojo.getDefaultDestination());
     }
 
     @Test
@@ -197,8 +203,16 @@ public class AbstractRpmMojoTest
     @Test
     public void scanMasterFiles()
     {
-        /*
-        scanMasterFiles
-         */
+        this.mojo.setBuildPath(String.format("%s%sbuild", this.testOutputPath, File.separator));
+        this.mojo.scanMasterFiles();
+
+        Set<String> masterFiles = this.mojo.getMasterFiles();
+        assertEquals(67, masterFiles.size());
+    }
+
+    @Test
+    public void validate() throws MojoExecutionException
+    {
+        this.mojo.validate();
     }
 }

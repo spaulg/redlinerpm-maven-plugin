@@ -4,6 +4,8 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import uk.co.codezen.maven.redlinerpm.mojo.AbstractRpmMojo;
 
+import java.util.Set;
+
 public class MockMojo extends AbstractRpmMojo
 {
     /**
@@ -31,5 +33,15 @@ public class MockMojo extends AbstractRpmMojo
     public void validate() throws MojoExecutionException
     {
         super.validate();
+    }
+
+    /**
+     * Get master file set
+     *
+     * @return Master file set
+     */
+    public Set<String> getMasterFiles()
+    {
+        return this.masterFiles;
     }
 }
