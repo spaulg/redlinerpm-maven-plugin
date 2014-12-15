@@ -58,15 +58,15 @@ final public class PackageRpmMojo extends AbstractRpmMojo
                 includedFiles = rpmPackage.build();
             }
             catch (IOException ex) {
-                this.getLog().error(String.format("Unable to build package %s", rpmPackage.getName()));
+                this.getLog().error(String.format("Unable to build package %s", rpmPackage.getName()), ex);
                 throw new MojoExecutionException(String.format("Unable to build package %s", rpmPackage.getName()), ex);
             }
             catch (NoSuchAlgorithmException ex) {
-                this.getLog().error(String.format("Unable to build package %s", rpmPackage.getName()));
+                this.getLog().error(String.format("Unable to build package %s", rpmPackage.getName()), ex);
                 throw new MojoExecutionException(String.format("Unable to build package %s", rpmPackage.getName()), ex);
             }
             catch (AbstractRpmException ex) {
-                this.getLog().error(String.format("Unable to build package %s", rpmPackage.getName()));
+                this.getLog().error(String.format("Unable to build package %s", rpmPackage.getName()), ex);
                 throw new MojoExecutionException(String.format("Unable to build package %s", rpmPackage.getName()), ex);
             }
 

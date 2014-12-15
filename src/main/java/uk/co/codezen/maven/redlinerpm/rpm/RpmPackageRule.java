@@ -355,7 +355,7 @@ final public class RpmPackageRule
         String scanPath = this.getScanPath();
 
         // Confirm the scan path is still within the build path
-        if ( ! scanPath.startsWith(String.format("%s%s", buildPath, File.separator))) {
+        if ( ! String.format("%s%s", scanPath, File.separator).startsWith(String.format("%s%s", buildPath, File.separator))) {
             throw new CanonicalScanPathOutsideBuildPathException(scanPath, buildPath);
         }
 
@@ -389,7 +389,7 @@ final public class RpmPackageRule
         this.getLog().debug(String.format("Adding %d files found to package.", includedFiles.length));
         for (String includedFile : includedFiles) {
             String destinationPath = this.getDestinationOrDefault() + includedFile;
-            String sourcePath = String.format("%s%s", scanPath, includedFile);
+            String sourcePath = String.format("%s%s%s", scanPath, File.separator, includedFile);
 
             String owner = this.getOwnerOrDefault();
             String group = this.getGroupOrDefault();
