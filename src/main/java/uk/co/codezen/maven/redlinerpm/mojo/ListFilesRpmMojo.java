@@ -35,7 +35,7 @@ final public class ListFilesRpmMojo extends AbstractRpmMojo
      * @throws MojoExecutionException
      */
     @Override
-    public void execute() throws MojoExecutionException, MojoFailureException
+    public void execute() throws MojoExecutionException
     {
         // Perform initialisation of the mojo
         this.validate();

@@ -35,7 +35,6 @@ public class PackageRpmMojoTest
         this.project.setGroupId("uk.co.codezen");
         this.project.setArtifactId("packagerpmmojo-artifact");
         this.project.setName("test");
-        this.project.setVersion("1.0-SNAPSHOT");
         this.project.setUrl("http://www.example.com");
         this.project.setBuild(projectBuild);
 
