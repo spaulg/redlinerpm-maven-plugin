@@ -1,7 +1,5 @@
 package uk.co.codezen.maven.redlinerpm.mojo;
 
-import static org.junit.Assert.*;
-
 import org.apache.maven.model.Build;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
