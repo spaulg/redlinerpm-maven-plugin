@@ -2,10 +2,13 @@ package uk.co.codezen.maven.redlinerpm.rpm;
 
 import static org.junit.Assert.*;
 
+import org.apache.maven.model.Build;
 import org.apache.maven.project.MavenProject;
 import org.redline_rpm.header.Architecture;
 import org.redline_rpm.header.Os;
 import uk.co.codezen.maven.redlinerpm.mojo.PackageRpmMojo;
+import uk.co.codezen.maven.redlinerpm.rpm.exception.AbstractRpmException;
+import uk.co.codezen.maven.redlinerpm.rpm.exception.DuplicateRpmArtifactException;
 import uk.co.codezen.maven.redlinerpm.rpm.exception.UnknownArchitectureException;
 import uk.co.codezen.maven.redlinerpm.rpm.exception.UnknownOperatingSystemException;
 
@@ -13,26 +16,41 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RpmPackageTest
 {
+    String testOutputPath;
+
     private RpmPackage rpmPackage;
+    private MavenProject project;
+    private PackageRpmMojo mojo;
 
     @Before
     public void setUp()
     {
+        // Test output path
+        this.testOutputPath = System.getProperty("project.build.testOutputDirectory");
+
+        Build projectBuild = new Build();
+        projectBuild.setDirectory(this.testOutputPath);
+
         this.rpmPackage = new RpmPackage();
 
-        MavenProject project = new MavenProject();
-        project.setArtifactId("test-artifact");
-        project.setName("test");
-        project.setVersion("1.0");
+        this.project = new MavenProject();
+        this.project.setArtifactId("test-artifact");
+        this.project.setName("test");
+        this.project.setVersion("1.0");
+        this.project.setBuild(projectBuild);
 
-        PackageRpmMojo mojo = new PackageRpmMojo();
-        mojo.setProject(project);
-        this.rpmPackage.setMojo(mojo);
+        this.mojo = new PackageRpmMojo();
+        this.mojo.setProject(this.project);
+        this.mojo.setBuildPath(String.format("%s%sbuild", this.testOutputPath, File.separator));
+
+        this.rpmPackage.setMojo(this.mojo);
     }
 
     @Test
@@ -365,5 +383,118 @@ public class RpmPackageTest
 
         this.rpmPackage.setPrefixes(prefixes);
         assertEquals(prefixes, this.rpmPackage.getPrefixes());
+    }
+
+    @Test
+    public void build() throws NoSuchAlgorithmException, IOException, AbstractRpmException
+    {
+        this.project.setArtifactId("build");
+
+        List<RpmPackageAssociation> dependencies = new ArrayList<RpmPackageAssociation>();
+        RpmPackageAssociation dependency = new RpmPackageAssociation();
+        dependency.setName("dependency");
+        dependencies.add(dependency);
+        this.rpmPackage.setDependencies(dependencies);
+
+        List<RpmPackageAssociation> obsoletes = new ArrayList<RpmPackageAssociation>();
+        RpmPackageAssociation obsolete = new RpmPackageAssociation();
+        obsolete.setName("obsolete");
+        obsoletes.add(obsolete);
+        this.rpmPackage.setObsoletes(obsoletes);
+
+        List<RpmPackageAssociation> conflicts = new ArrayList<RpmPackageAssociation>();
+        RpmPackageAssociation conflict = new RpmPackageAssociation();
+        conflict.setName("conflict");
+        conflicts.add(conflict);
+        this.rpmPackage.setConflicts(conflicts);
+
+        List<RpmPackageRule> rules = new ArrayList<RpmPackageRule>();
+        RpmPackageRule rule = new RpmPackageRule();
+        rules.add(rule);
+        this.rpmPackage.setRules(rules);
+
+
+        // Event hooks
+        File scriptFile = new File(String.format("%s%s/unit/uk/co/codezen/maven/redlinerpm/rpm/RpmPackage.sh",
+                this.testOutputPath, File.separator));
+
+        this.rpmPackage.setPreTransactionScriptFile(scriptFile);
+        this.rpmPackage.setPreTransactionProgram("/bin/sh");
+
+        this.rpmPackage.setPreInstallScriptFile(scriptFile);
+        this.rpmPackage.setPreInstallProgram("/bin/sh");
+
+        this.rpmPackage.setPostInstallScriptFile(scriptFile);
+        this.rpmPackage.setPostInstallProgram("/bin/sh");
+
+        this.rpmPackage.setPreUninstallScriptFile(scriptFile);
+        this.rpmPackage.setPreUninstallProgram("/bin/sh");
+
+        this.rpmPackage.setPostUninstallScriptFile(scriptFile);
+        this.rpmPackage.setPostUninstallProgram("/bin/sh");
+
+        this.rpmPackage.setPostTransactionScriptFile(scriptFile);
+        this.rpmPackage.setPostTransactionProgram("/bin/sh");
+
+        // todo: triggers
+
+        this.rpmPackage.build();
+
+        String rpmFileName = String.format("%s%s%s", this.testOutputPath, File.separator, this.rpmPackage.getFinalName());
+        assertEquals(true, new File(rpmFileName).exists());
+        boolean exThrown = false;
+
+        // Build again, causing duplicate file
+        try {
+            this.rpmPackage.build();
+        }
+        catch(DuplicateRpmArtifactException ex) {
+            exThrown = true;
+        }
+
+        assertEquals(true, exThrown);
+    }
+
+    @Test
+    public void buildSecondaryAttachmentNameDifference() throws NoSuchAlgorithmException, IOException, AbstractRpmException
+    {
+        this.rpmPackage.setName("buildSecondaryAttachment");
+        this.rpmPackage.build();
+
+        String rpmFileName = String.format("%s%s%s", this.testOutputPath, File.separator, this.rpmPackage.getFinalName());
+        assertEquals(true, new File(rpmFileName).exists());
+    }
+
+    @Test
+    public void buildSecondaryAttachmentVersionDifference() throws NoSuchAlgorithmException, IOException, AbstractRpmException
+    {
+        this.rpmPackage.setVersion("2.0");
+        this.rpmPackage.build();
+
+        String rpmFileName = String.format("%s%s%s", this.testOutputPath, File.separator, this.rpmPackage.getFinalName());
+        assertEquals(true, new File(rpmFileName).exists());
+    }
+
+    @Test
+    public void buildSecondaryAttachmentNameAndVersionDifference() throws NoSuchAlgorithmException, IOException, AbstractRpmException
+    {
+        this.rpmPackage.setName("buildSecondaryAttachmentNameAndVersionDifference");
+        this.rpmPackage.setVersion("2.0");
+        this.rpmPackage.build();
+
+        String rpmFileName = String.format("%s%s%s", this.testOutputPath, File.separator, this.rpmPackage.getFinalName());
+        assertEquals(true, new File(rpmFileName).exists());
+    }
+
+    @Test
+    public void buildWithoutAttachment() throws NoSuchAlgorithmException, IOException, AbstractRpmException
+    {
+        this.project.setArtifactId("buildWithoutAttachment");
+
+        this.rpmPackage.setAttach(false);
+        this.rpmPackage.build();
+
+        String rpmFileName = String.format("%s%s%s", this.testOutputPath, File.separator, this.rpmPackage.getFinalName());
+        assertEquals(true, new File(rpmFileName).exists());
     }
 }
