@@ -91,7 +91,7 @@ final public class PackageRpmMojo extends AbstractRpmMojo
         }
 
         // Error if no files were included within the RPM packages.
-        if (this.packages.size() > 0 && 0 == totalFilesPackaged) {
+        if (0 < this.packages.size() && 0 == totalFilesPackaged) {
             // No files were actually packaged. Perhaps something got missed.
             this.getLog().error(String.format("No files were included when packaging RPM artifacts. " +
                     "Did you specify the correct output path?"));

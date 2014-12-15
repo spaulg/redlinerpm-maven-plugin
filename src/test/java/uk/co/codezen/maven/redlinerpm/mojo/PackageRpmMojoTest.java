@@ -20,6 +20,7 @@ public class PackageRpmMojoTest
 
     private PackageRpmMojo mojo;
     private MavenProject project;
+    private RpmPackageRule packageRule;
 
     @Before
     public void setUp()
@@ -41,13 +42,8 @@ public class PackageRpmMojoTest
         this.mojo = new PackageRpmMojo();
         this.mojo.setProject(this.project);
 
-        // Setup rules
-        List<String> includes = new ArrayList<String>();
-        includes.add("**");
-
         List<RpmPackageRule> packageRules = new ArrayList<RpmPackageRule>();
-        RpmPackageRule packageRule = new RpmPackageRule();
-        packageRule.setIncludes(includes);
+        this.packageRule = new RpmPackageRule();
         packageRules.add(packageRule);
 
         // Setup packages
@@ -65,7 +61,62 @@ public class PackageRpmMojoTest
     @Test
     public void packageRpm() throws MojoExecutionException
     {
+        this.project.setVersion("1.0-SNAPSHOT");
+
+        List<String> includes = new ArrayList<String>();
+        includes.add("**");
+        this.packageRule.setIncludes(includes);
+
         this.mojo.execute();
         assertEquals(true, this.project.getArtifact().getFile().exists());
+    }
+
+    @Test(expected = MojoExecutionException.class)
+    public void packageRpmMissedFiles() throws MojoExecutionException
+    {
+        this.project.setVersion("2.0-SNAPSHOT");
+
+        List<String> includes = new ArrayList<String>();
+        this.packageRule.setIncludes(includes);
+
+        this.mojo.execute();
+    }
+
+    @Test
+    public void packageRpmMissedFilesWithoutChecks() throws MojoExecutionException
+    {
+        this.mojo.setPerformCheckingForExtraFiles(false);
+        this.project.setVersion("3.0-SNAPSHOT");
+
+        List<String> includes = new ArrayList<String>();
+        includes.add("**/*.php");
+        this.packageRule.setIncludes(includes);
+
+        this.mojo.execute();
+    }
+
+    @Test(expected = MojoExecutionException.class)
+    public void packageRpmNoFilesPackaged() throws MojoExecutionException
+    {
+        this.mojo.setPerformCheckingForExtraFiles(false);
+        this.project.setVersion("4.0-SNAPSHOT");
+
+        List<String> includes = new ArrayList<String>();
+        this.packageRule.setIncludes(includes);
+
+        this.mojo.execute();
+    }
+
+    @Test
+    public void packageRpmNoFilesPackagedNoPackages() throws MojoExecutionException
+    {
+        this.mojo.setPackages(new ArrayList<RpmPackage>());
+        this.mojo.setPerformCheckingForExtraFiles(false);
+        this.project.setVersion("5.0-SNAPSHOT");
+
+        List<String> includes = new ArrayList<String>();
+        this.packageRule.setIncludes(includes);
+
+        this.mojo.execute();
     }
 }
