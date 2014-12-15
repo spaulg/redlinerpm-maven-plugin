@@ -598,7 +598,7 @@ final public class RpmPackage
         }
         catch (IllegalArgumentException ex) {
             // Unknown architecture
-            throw new UnknownArchitectureException(architecture);
+            throw new UnknownArchitectureException(architecture, ex);
         }
     }
 
@@ -634,7 +634,7 @@ final public class RpmPackage
         }
         catch(IllegalArgumentException ex) {
             // Unknown operating system
-            throw new UnknownOperatingSystemException(operatingSystem);
+            throw new UnknownOperatingSystemException(operatingSystem, ex);
         }
     }
 

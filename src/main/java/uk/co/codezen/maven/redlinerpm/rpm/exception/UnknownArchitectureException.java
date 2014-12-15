@@ -31,4 +31,16 @@ final public class UnknownArchitectureException extends AbstractRpmException
     {
         this.message = String.format("Unknown architecture '%s'", unknownArchitecture);
     }
+
+    /**
+     * Constructor
+     *
+     * @param unknownArchitecture Unknown architecture name
+     * @param cause Exception cause
+     */
+    public UnknownArchitectureException(String unknownArchitecture, Throwable cause)
+    {
+        this.message = String.format("Unknown architecture '%s'", unknownArchitecture);
+        this.cause = cause;
+    }
 }

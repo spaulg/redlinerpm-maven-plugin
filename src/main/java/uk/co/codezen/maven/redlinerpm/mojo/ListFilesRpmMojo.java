@@ -53,7 +53,7 @@ final public class ListFilesRpmMojo extends AbstractRpmMojo
                 includedFiles = rpmPackage.listFiles();
             }
             catch (AbstractRpmException ex) {
-                this.getLog().error(String.format("Unable to build package %s", rpmPackage.getName()));
+                this.getLog().error(String.format("Unable to build package %s", rpmPackage.getName()), ex);
                 throw new MojoExecutionException(String.format("Unable to build package %s", rpmPackage.getName()), ex);
             }
 

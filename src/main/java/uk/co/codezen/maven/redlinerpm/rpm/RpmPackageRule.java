@@ -319,7 +319,8 @@ final public class RpmPackageRule
      */
     public String getScanPath() throws InvalidPathException
     {
-        String scanPath = String.format("%s%s%s", this.rpmPackage.getMojo().getBuildPath(), File.separator, this.getBase());
+        String scanPath = String.format("%s%s%s",
+                this.rpmPackage.getMojo().getBuildPath(), File.separator, this.getBase());
 
         try {
             return new File(scanPath).getCanonicalPath();
@@ -355,7 +356,8 @@ final public class RpmPackageRule
         String scanPath = this.getScanPath();
 
         // Confirm the scan path is still within the build path
-        if ( ! String.format("%s%s", scanPath, File.separator).startsWith(String.format("%s%s", buildPath, File.separator))) {
+        if ( ! String.format("%s%s", scanPath, File.separator).startsWith(
+                String.format("%s%s", buildPath, File.separator))) {
             throw new CanonicalScanPathOutsideBuildPathException(scanPath, buildPath);
         }
 
@@ -396,7 +398,8 @@ final public class RpmPackageRule
             int fileMode = this.getModeOrDefault();
 
 
-            this.getLog().debug(String.format("Adding file: %s to path %s with owner '%s', group '%s', with file mode %o.",
+            this.getLog().debug(String.format("Adding file: %s to path %s with owner '%s', " +
+                    "group '%s', with file mode %o.",
                     sourcePath, destinationPath, owner, group, fileMode));
 
             builder.addFile(

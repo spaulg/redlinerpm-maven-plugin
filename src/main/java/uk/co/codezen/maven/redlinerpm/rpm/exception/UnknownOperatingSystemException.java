@@ -31,4 +31,16 @@ final public class UnknownOperatingSystemException extends AbstractRpmException
     {
         this.message = String.format("Unknown operating system '%s'", unknownOperatingSystem);
     }
+
+    /**
+     * Constructor
+     *
+     * @param unknownOperatingSystem Unknown operating system
+     * @param cause Exception cause
+     */
+    public UnknownOperatingSystemException(String unknownOperatingSystem, Throwable cause)
+    {
+        this.message = String.format("Unknown operating system '%s'", unknownOperatingSystem);
+        this.cause = cause;
+    }
 }
