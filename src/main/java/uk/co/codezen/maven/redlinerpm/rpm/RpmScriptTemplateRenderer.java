@@ -58,21 +58,36 @@ final public class RpmScriptTemplateRenderer
         // Read the template file
         char[] buffer = new char[1024];
         StringBuilder stringBuilder = new StringBuilder();
-        FileReader reader = new FileReader(templateFile);
+        FileReader reader = null;
 
-        int bytesRead;
-        while (-1 != (bytesRead = reader.read(buffer))) {
-            stringBuilder.append(buffer, 0, bytesRead);
+        try {
+            reader = new FileReader(templateFile);
+
+            int bytesRead;
+            while (-1 != (bytesRead = reader.read(buffer))) {
+                stringBuilder.append(buffer, 0, bytesRead);
+            }
         }
-
-        reader.close();
+        finally {
+            if (null != reader) {
+                reader.close();
+            }
+        }
 
         // Parse the template
         String renderedTemplate = (String) TemplateRuntime.eval(stringBuilder.toString(), this.parameterMap);
 
         // Write the generated script
-        FileWriter writer = new FileWriter(renderedFile);
-        writer.write(renderedTemplate);
-        writer.close();
+        FileWriter writer = null;
+
+        try {
+            writer = new FileWriter(renderedFile);
+            writer.write(renderedTemplate);
+        }
+        finally {
+            if (null != writer) {
+                writer.close();
+            }
+        }
     }
 }
