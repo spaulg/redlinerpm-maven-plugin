@@ -52,6 +52,7 @@ final public class RpmScriptTemplateRenderer
      *
      * @param templateFile Template file
      * @param renderedFile Rendered output file
+     * @throws IOException
      */
     public void render(File templateFile, File renderedFile) throws IOException
     {

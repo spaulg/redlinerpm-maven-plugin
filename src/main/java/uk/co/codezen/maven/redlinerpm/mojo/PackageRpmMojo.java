@@ -38,7 +38,8 @@ final public class PackageRpmMojo extends AbstractRpmMojo
     /**
      * Execute goal
      *
-     * @throws MojoExecutionException
+     * @throws MojoExecutionException There was a problem running the Mojo.
+     *          Further details are available in the message and cause properties.
      */
     public void execute() throws MojoExecutionException
     {

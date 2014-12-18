@@ -584,6 +584,7 @@ final public class RpmPackage
      * Set package architecture
      *
      * @param architecture Package architecture
+     * @throws UnknownArchitectureException The architecture supplied is not recognised.
      */
     public void setArchitecture(String architecture) throws UnknownArchitectureException
     {
@@ -620,6 +621,7 @@ final public class RpmPackage
      * Set package operating system
      *
      * @param operatingSystem Package operating system
+     * @throws UnknownOperatingSystemException The operating system supplied is not recognised.
      */
     public void setOperatingSystem(String operatingSystem) throws UnknownOperatingSystemException
     {
@@ -664,9 +666,11 @@ final public class RpmPackage
     }
 
     /**
-     * Get package build host name
+     * Get package build host name.
+     * If one is not supplied, the default hostname of the machine running the build is used.
      *
      * @return Package build host name
+     * @throws UnknownHostException The build host could not be retrieved automatically.
      */
     public String getBuildHostName() throws UnknownHostException
     {
@@ -1121,6 +1125,9 @@ final public class RpmPackage
      * Build the package
      *
      * @return Files included within the package
+     * @throws IOException
+     * @throws NoSuchAlgorithmException
+     * @throws AbstractRpmException
      */
     public Set<String> build() throws IOException, NoSuchAlgorithmException, AbstractRpmException
     {
@@ -1346,6 +1353,7 @@ final public class RpmPackage
      * List files matched for the package
      *
      * @return Files included within the package
+     * @throws AbstractRpmException
      */
     public Set<String> listFiles() throws AbstractRpmException
     {

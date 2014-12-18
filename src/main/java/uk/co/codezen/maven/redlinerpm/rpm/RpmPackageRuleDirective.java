@@ -31,6 +31,7 @@ final public class RpmPackageRuleDirective
      * Factory the directive object
      *
      * @param directiveList RPM directive list
+     * @throws InvalidRpmPackageRuleDirectiveException
      */
     public static Directive newDirective(List<String> directiveList) throws InvalidRpmPackageRuleDirectiveException
     {

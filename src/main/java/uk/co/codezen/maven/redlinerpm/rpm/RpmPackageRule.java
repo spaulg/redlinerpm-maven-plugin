@@ -296,6 +296,7 @@ final public class RpmPackageRule
      * Set file directives
      *
      * @param directives File directives
+     * @throws InvalidRpmPackageRuleDirectiveException
      */
     public void setDirectives(List<String> directives) throws InvalidRpmPackageRuleDirectiveException
     {
@@ -316,6 +317,7 @@ final public class RpmPackageRule
      * Get path used for scanning for files to be included by the rule
      *
      * @return Scan path
+     * @throws InvalidPathException
      */
     public String getScanPath() throws InvalidPathException
     {
@@ -381,6 +383,7 @@ final public class RpmPackageRule
      * @return Matched file list
      * @throws IOException
      * @throws NoSuchAlgorithmException
+     * @throws AbstractRpmException
      */
     public String[] addFiles(Builder builder) throws IOException, NoSuchAlgorithmException, AbstractRpmException
     {

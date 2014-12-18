@@ -92,6 +92,7 @@ public interface RpmMojo
      * Get the build root path
      *
      * @return Build root path
+     * @throws InvalidPathException Build path is invalid and could not be retrieved
      */
     public String getBuildPath() throws InvalidPathException;
 
