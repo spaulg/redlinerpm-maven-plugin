@@ -1328,22 +1328,21 @@ final public class RpmPackage
         FileOutputStream packageOutputStream = new FileOutputStream(packageFile);
         builder.build(packageOutputStream.getChannel());
 
+        RpmMojo mojo = this.getMojo();
 
-        // Add artifact
+        // Add primary artifacts, only if the packaging type is rpm. attach flag is ignored for
+        // primary artifacts
+        if (mojo.getProjectPackagingType().equals("rpm")
+                && mojo.getProjectArtifactId().equals(this.getName())
+                && mojo.getProjectVersion().equals(this.getProjectVersion())) {
+            this.getLog().info(String.format("Attaching %s as primary artifact", packageFile.getCanonicalPath()));
+            mojo.setPrimaryArtifact(packageFile, this.getClassifier());
+        }
+
+        // Add secondary artifacts, but only if instructed to attach them
         if (this.isAttach()) {
-            RpmMojo mojo = this.getMojo();
-
-            if (mojo.getProjectArtifactId().equals(this.getName())
-                    && mojo.getProjectVersion().equals(this.getProjectVersion())) {
-                // Primary artifact
-                this.getLog().info(String.format("Attaching %s as primary artifact", packageFile.getCanonicalPath()));
-                mojo.setPrimaryArtifact(packageFile, this.getClassifier());
-            }
-            else {
-                // Secondary artifact
-                this.getLog().info(String.format("Attaching %s as secondary artifact", packageFile.getCanonicalPath()));
-                mojo.addSecondaryArtifact(packageFile, this.getName(), this.getProjectVersion(), this.getClassifier());
-            }
+            this.getLog().info(String.format("Attaching %s as secondary artifact", packageFile.getCanonicalPath()));
+            mojo.addSecondaryArtifact(packageFile, this.getName(), this.getProjectVersion(), this.getClassifier());
         }
 
         return fileList;

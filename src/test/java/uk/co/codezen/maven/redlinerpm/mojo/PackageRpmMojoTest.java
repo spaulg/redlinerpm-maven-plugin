@@ -37,6 +37,7 @@ public class PackageRpmMojoTest
         this.project.setName("test");
         this.project.setUrl("http://www.example.com");
         this.project.setBuild(projectBuild);
+        this.project.setPackaging("rpm");
 
         this.mojo = new PackageRpmMojo();
         this.mojo.setProject(this.project);
@@ -68,6 +69,21 @@ public class PackageRpmMojoTest
 
         this.mojo.execute();
         assertEquals(true, this.project.getArtifact().getFile().exists());
+    }
+
+    @Test
+    public void packageRpmNonRpmPackagingType() throws MojoExecutionException
+    {
+        this.project.setPackaging("jar");
+        
+        this.project.setVersion("1.1-SNAPSHOT");
+
+        List<String> includes = new ArrayList<String>();
+        includes.add("**");
+        this.packageRule.setIncludes(includes);
+
+        this.mojo.execute();
+        assertNull(this.project.getArtifact());
     }
 
     @Test(expected = MojoExecutionException.class)

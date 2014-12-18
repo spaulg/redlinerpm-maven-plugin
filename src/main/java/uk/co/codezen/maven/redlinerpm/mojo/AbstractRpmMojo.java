@@ -190,6 +190,17 @@ abstract public class AbstractRpmMojo extends AbstractMojo implements RpmMojo
     }
 
     /**
+     * Get project packaging type
+     *
+     * @return Packaging type
+     */
+    @Override
+    public String getProjectPackagingType()
+    {
+        return this.getProject().getPackaging();
+    }
+
+    /**
      * Get collapsed project licensing
      *
      * @return Project licenses, collapsed in to a single line, separated by commas.

@@ -82,6 +82,13 @@ public interface RpmMojo
     public String getProjectUrl();
 
     /**
+     * Get project packaging type
+     *
+     * @return Packaging type
+     */
+    public String getProjectPackagingType();
+
+    /**
      * Get collapsed project licensing
      *
      * @return Project licenses, collapsed in to a single line, separated by commas.
