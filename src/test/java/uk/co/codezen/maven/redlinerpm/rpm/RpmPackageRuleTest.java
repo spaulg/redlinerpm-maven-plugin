@@ -60,7 +60,7 @@ public class RpmPackageRuleTest
         mojo.setDefaultFileMode(0644);
         mojo.setDefaultOwner("root");
         mojo.setDefaultGroup("root");
-        mojo.setDefaultDestination("/var/www/test");
+        mojo.setDefaultDestination(String.format("%svar%swww%stest", File.separator, File.separator, File.separator));
         mojo.setBuildPath(testOutputPath);
 
         // Empty maven project is required
@@ -101,13 +101,13 @@ public class RpmPackageRuleTest
     public void baseAccessors()
     {
         this.rpmFileRule.setBase("");
-        assertEquals("/", this.rpmFileRule.getBase());
+        assertEquals(File.separator, this.rpmFileRule.getBase());
 
         this.rpmFileRule.setBase(null);
-        assertEquals("/", this.rpmFileRule.getBase());
+        assertEquals(File.separator, this.rpmFileRule.getBase());
 
-        this.rpmFileRule.setBase("/foo");
-        assertEquals("/foo", this.rpmFileRule.getBase());
+        this.rpmFileRule.setBase(String.format("%sfoo", File.separator));
+        assertEquals(String.format("%sfoo", File.separator), this.rpmFileRule.getBase());
     }
 
     @Test
@@ -119,11 +119,12 @@ public class RpmPackageRuleTest
         this.rpmFileRule.setDestination(null);
         assertEquals(null, this.rpmFileRule.getDestination());
 
-        assertEquals("/var/www/test", this.rpmFileRule.getDestinationOrDefault());
+        assertEquals(String.format("%svar%swww%stest", File.separator, File.separator, File.separator),
+                this.rpmFileRule.getDestinationOrDefault());
 
-        this.rpmFileRule.setDestination("/foo");
-        assertEquals("/foo", this.rpmFileRule.getDestination());
-        assertEquals("/foo", this.rpmFileRule.getDestinationOrDefault());
+        this.rpmFileRule.setDestination(String.format("%sfoo", File.separator));
+        assertEquals(String.format("%sfoo", File.separator), this.rpmFileRule.getDestination());
+        assertEquals(String.format("%sfoo", File.separator), this.rpmFileRule.getDestinationOrDefault());
     }
 
     @Test
@@ -193,7 +194,7 @@ public class RpmPackageRuleTest
     @Test
     public void scanPathAccessor() throws InvalidPathException
     {
-        String scanPath = String.format("%s/build", new File(this.testOutputPath).getAbsolutePath());
+        String scanPath = String.format("%s%sbuild", new File(this.testOutputPath).getAbsolutePath(), File.separator);
         assertEquals(scanPath, this.rpmFileRule.getScanPath());
     }
 
@@ -216,7 +217,7 @@ public class RpmPackageRuleTest
     @Test(expected = CanonicalScanPathOutsideBuildPathException.class)
     public void testListFilesOutsideBuildPath() throws AbstractRpmException
     {
-        this.rpmFileRule.setBase("../");
+        this.rpmFileRule.setBase(String.format("..%s", File.separator));
         System.out.println(this.rpmFileRule.getScanPath());
         this.rpmFileRule.listFiles();
     }
