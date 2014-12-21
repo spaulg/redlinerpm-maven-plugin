@@ -238,6 +238,6 @@ public class RpmPackageRuleTest
 
         String[] files = this.rpmFileRule.addFiles(builder);
         assertEquals(65, files.length);
-        assertEquals(95, builder.getContents().size()); // includes directories
+        assertEquals(96, builder.getContents().size()); // includes directories
     }
 }

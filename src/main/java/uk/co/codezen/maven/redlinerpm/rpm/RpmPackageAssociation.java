@@ -45,6 +45,11 @@ final public class RpmPackageAssociation
      */
     private String maxVersion = null;
 
+    /**
+     * Version requirement has range
+     */
+    private boolean isRange = false;
+
 
 
     /**
@@ -76,6 +81,7 @@ final public class RpmPackageAssociation
     {
         if (version == null || version.equals("RELEASE") || version.equals("")) {
             // No version required, simplify things by setting to null
+            this.isRange = false;
             this.version = null;
             this.minVersion = null;
             this.maxVersion = null;
@@ -89,6 +95,7 @@ final public class RpmPackageAssociation
         if (matcher.matches()) {
             // Min/max version number based on groups
             // [5.3.8,5.4) or [5.3.8,) or [,5.4)
+            this.isRange = true;
             this.version = null;
 
             String minVersion = matcher.group(1);
@@ -107,10 +114,21 @@ final public class RpmPackageAssociation
         }
         else {
             // Specific version number
+            this.isRange = false;
             this.version = version;
             this.minVersion = null;
             this.maxVersion = null;
         }
+    }
+
+    /**
+     * Is version range
+     *
+     * @return Version range, true or false
+     */
+    public boolean isVersionRange()
+    {
+        return this.isRange;
     }
 
     /**

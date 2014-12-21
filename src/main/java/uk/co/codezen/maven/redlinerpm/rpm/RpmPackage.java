@@ -1156,48 +1156,63 @@ final public class RpmPackage
 
         // Process dependencies
         for (RpmPackageAssociation dependency : this.getDependencies()) {
-            if (null != dependency.getVersion()) {
-                builder.addDependency(dependency.getName(), 0, dependency.getVersion());
-            }
-            else {
+            if (dependency.isVersionRange()) {
                 if (null != dependency.getMinVersion()) {
-                    builder.addDependency(dependency.getName(), GREATER | EQUAL, dependency.getVersion());
+                    builder.addDependency(dependency.getName(), GREATER | EQUAL, dependency.getMinVersion());
                 }
 
                 if (null != dependency.getMaxVersion()) {
-                    builder.addDependency(dependency.getName(), LESS, dependency.getVersion());
+                    builder.addDependency(dependency.getName(), LESS, dependency.getMaxVersion());
+                }
+            }
+            else {
+                if (null != dependency.getVersion()) {
+                    builder.addDependency(dependency.getName(), EQUAL, dependency.getVersion());
+                }
+                else {
+                    builder.addDependency(dependency.getName(), 0, "");
                 }
             }
         }
 
         // Process obsoletes
         for (RpmPackageAssociation obsolete : this.getObsoletes()) {
-            if (null != obsolete.getVersion()) {
-                builder.addObsoletes(obsolete.getName(), 0, obsolete.getVersion());
-            }
-            else {
+            if (obsolete.isVersionRange()) {
                 if (null != obsolete.getMinVersion()) {
-                    builder.addObsoletes(obsolete.getName(), GREATER | EQUAL, obsolete.getVersion());
+                    builder.addObsoletes(obsolete.getName(), GREATER | EQUAL, obsolete.getMinVersion());
                 }
 
                 if (null != obsolete.getMaxVersion()) {
-                    builder.addObsoletes(obsolete.getName(), LESS, obsolete.getVersion());
+                    builder.addObsoletes(obsolete.getName(), LESS, obsolete.getMaxVersion());
+                }
+            }
+            else {
+                if (null != obsolete.getVersion()) {
+                    builder.addObsoletes(obsolete.getName(), EQUAL, obsolete.getVersion());
+                }
+                else {
+                    builder.addObsoletes(obsolete.getName(), 0, "");
                 }
             }
         }
 
         // Process conflicts
         for (RpmPackageAssociation conflict : this.getConflicts()) {
-            if (null != conflict.getVersion()) {
-                builder.addConflicts(conflict.getName(), 0, conflict.getVersion());
-            }
-            else {
+            if (conflict.isVersionRange()) {
                 if (null != conflict.getMinVersion()) {
-                    builder.addConflicts(conflict.getName(), GREATER | EQUAL, conflict.getVersion());
+                    builder.addConflicts(conflict.getName(), GREATER | EQUAL, conflict.getMinVersion());
                 }
 
                 if (null != conflict.getMaxVersion()) {
-                    builder.addConflicts(conflict.getName(), LESS, conflict.getVersion());
+                    builder.addConflicts(conflict.getName(), LESS, conflict.getMaxVersion());
+                }
+            }
+            else {
+                if (null != conflict.getVersion()) {
+                    builder.addConflicts(conflict.getName(), EQUAL, conflict.getVersion());
+                }
+                else {
+                    builder.addConflicts(conflict.getName(), 0, "");
                 }
             }
         }
@@ -1268,7 +1283,7 @@ final public class RpmPackage
                 int flags = 0;
                 String version = null;
 
-                if (null == dependency.getVersion()) {
+                if (null != dependency.getVersion()) {
                     version = dependency.getVersion();
                 }
                 else if (null != dependency.getMinVersion()) {
@@ -1330,17 +1345,16 @@ final public class RpmPackage
 
         RpmMojo mojo = this.getMojo();
 
-        // Add primary artifacts, only if the packaging type is rpm. attach flag is ignored for
-        // primary artifacts
         if (mojo.getProjectPackagingType().equals("rpm")
                 && mojo.getProjectArtifactId().equals(this.getName())
                 && mojo.getProjectVersion().equals(this.getProjectVersion())) {
+            // Add primary artifacts, only if the packaging type is rpm. attach flag is ignored for
+            // primary artifacts
             this.getLog().info(String.format("Attaching %s as primary artifact", packageFile.getCanonicalPath()));
             mojo.setPrimaryArtifact(packageFile, this.getClassifier());
         }
-
-        // Add secondary artifacts, but only if instructed to attach them
-        if (this.isAttach()) {
+        else if (this.isAttach()) {
+            // Add secondary artifacts, but only if instructed to attach them
             this.getLog().info(String.format("Attaching %s as secondary artifact", packageFile.getCanonicalPath()));
             mojo.addSecondaryArtifact(packageFile, this.getName(), this.getProjectVersion(), this.getClassifier());
         }

@@ -393,7 +393,7 @@ final public class RpmPackageRule
         // Add files to package at destination
         this.getLog().debug(String.format("Adding %d files found to package.", includedFiles.length));
         for (String includedFile : includedFiles) {
-            String destinationPath = this.getDestinationOrDefault() + includedFile;
+            String destinationPath = this.getDestinationOrDefault() + File.separator + includedFile;
             String sourcePath = String.format("%s%s%s", scanPath, File.separator, includedFile);
 
             String owner = this.getOwnerOrDefault();
