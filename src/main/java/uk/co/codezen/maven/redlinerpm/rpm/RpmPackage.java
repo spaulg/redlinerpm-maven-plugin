@@ -1152,8 +1152,6 @@ final public class RpmPackage
         builder.setUrl(this.getUrl());
         builder.setPrefixes(this.getPrefixes().toArray(new String[0]));
 
-        // todo: provides
-
         // Process dependencies
         for (RpmPackageAssociation dependency : this.getDependencies()) {
             if (null != dependency.getName()) {
