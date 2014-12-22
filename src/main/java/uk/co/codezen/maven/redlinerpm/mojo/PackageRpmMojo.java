@@ -43,9 +43,6 @@ final public class PackageRpmMojo extends AbstractRpmMojo
      */
     public void execute() throws MojoExecutionException
     {
-        // Perform initialisation of the mojo
-        this.validate();
-
         // Scan files to create master list
         this.scanMasterFiles();
         long totalFilesPackaged = 0;

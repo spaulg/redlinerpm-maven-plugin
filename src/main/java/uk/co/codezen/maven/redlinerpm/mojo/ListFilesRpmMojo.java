@@ -38,9 +38,6 @@ final public class ListFilesRpmMojo extends AbstractRpmMojo
     @Override
     public void execute() throws MojoExecutionException
     {
-        // Perform initialisation of the mojo
-        this.validate();
-
         this.getLog().info("Declared packages:");
 
         // Scan files to create master list

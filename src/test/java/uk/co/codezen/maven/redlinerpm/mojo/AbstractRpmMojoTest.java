@@ -211,10 +211,4 @@ public class AbstractRpmMojoTest
         Set<String> masterFiles = this.mojo.getMasterFiles();
         assertEquals(67, masterFiles.size());
     }
-
-    @Test
-    public void validate() throws MojoExecutionException
-    {
-        this.mojo.validate();
-    }
 }

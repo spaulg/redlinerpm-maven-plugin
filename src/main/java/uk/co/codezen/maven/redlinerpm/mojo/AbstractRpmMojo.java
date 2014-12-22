@@ -464,27 +464,4 @@ abstract public class AbstractRpmMojo extends AbstractMojo implements RpmMojo
 
         Collections.addAll(this.masterFiles, fileMatches);
     }
-
-    /**
-     * Validate the Mojo parameters
-     *
-     * @throws MojoExecutionException
-     */
-    protected void validate() throws MojoExecutionException
-    {
-//        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-//        Validator validator = factory.getValidator();
-//        Set<ConstraintViolation<AbstractRpmMojo>> constraintViolations = validator.validate(this);
-//
-//        if (constraintViolations.size() > 0) {
-//            // Validation errors
-//            String message = "";
-//
-//            for (ConstraintViolation<AbstractRpmMojo> violation : constraintViolations) {
-//                message += String.format("'%s' %s.", violation.getPropertyPath(), violation.getMessage());
-//            }
-//
-//            throw new MojoExecutionException(String.format("Invalid parameter(s): %s", message));
-//        }
-    }
 }

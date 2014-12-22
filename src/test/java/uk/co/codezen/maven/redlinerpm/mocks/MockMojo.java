@@ -29,15 +29,6 @@ public class MockMojo extends AbstractRpmMojo
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void validate() throws MojoExecutionException
-    {
-        super.validate();
-    }
-
-    /**
      * Get master file set
      *
      * @return Master file set
