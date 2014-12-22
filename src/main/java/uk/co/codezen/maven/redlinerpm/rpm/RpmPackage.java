@@ -1156,63 +1156,63 @@ final public class RpmPackage
 
         // Process dependencies
         for (RpmPackageAssociation dependency : this.getDependencies()) {
-            if (dependency.isVersionRange()) {
-                if (null != dependency.getMinVersion()) {
-                    builder.addDependency(dependency.getName(), GREATER | EQUAL, dependency.getMinVersion());
-                }
+            if (null != dependency.getName()) {
+                if (dependency.isVersionRange()) {
+                    if (null != dependency.getMinVersion()) {
+                        builder.addDependency(dependency.getName(), GREATER | EQUAL, dependency.getMinVersion());
+                    }
 
-                if (null != dependency.getMaxVersion()) {
-                    builder.addDependency(dependency.getName(), LESS, dependency.getMaxVersion());
-                }
-            }
-            else {
-                if (null != dependency.getVersion()) {
-                    builder.addDependency(dependency.getName(), EQUAL, dependency.getVersion());
-                }
-                else {
-                    builder.addDependency(dependency.getName(), 0, "");
+                    if (null != dependency.getMaxVersion()) {
+                        builder.addDependency(dependency.getName(), LESS, dependency.getMaxVersion());
+                    }
+                } else {
+                    if (null != dependency.getVersion()) {
+                        builder.addDependency(dependency.getName(), EQUAL, dependency.getVersion());
+                    } else {
+                        builder.addDependency(dependency.getName(), 0, "");
+                    }
                 }
             }
         }
 
         // Process obsoletes
         for (RpmPackageAssociation obsolete : this.getObsoletes()) {
-            if (obsolete.isVersionRange()) {
-                if (null != obsolete.getMinVersion()) {
-                    builder.addObsoletes(obsolete.getName(), GREATER | EQUAL, obsolete.getMinVersion());
-                }
+            if (null != obsolete.getName()) {
+                if (obsolete.isVersionRange()) {
+                    if (null != obsolete.getMinVersion()) {
+                        builder.addObsoletes(obsolete.getName(), GREATER | EQUAL, obsolete.getMinVersion());
+                    }
 
-                if (null != obsolete.getMaxVersion()) {
-                    builder.addObsoletes(obsolete.getName(), LESS, obsolete.getMaxVersion());
-                }
-            }
-            else {
-                if (null != obsolete.getVersion()) {
-                    builder.addObsoletes(obsolete.getName(), EQUAL, obsolete.getVersion());
-                }
-                else {
-                    builder.addObsoletes(obsolete.getName(), 0, "");
+                    if (null != obsolete.getMaxVersion()) {
+                        builder.addObsoletes(obsolete.getName(), LESS, obsolete.getMaxVersion());
+                    }
+                } else {
+                    if (null != obsolete.getVersion()) {
+                        builder.addObsoletes(obsolete.getName(), EQUAL, obsolete.getVersion());
+                    } else {
+                        builder.addObsoletes(obsolete.getName(), 0, "");
+                    }
                 }
             }
         }
 
         // Process conflicts
         for (RpmPackageAssociation conflict : this.getConflicts()) {
-            if (conflict.isVersionRange()) {
-                if (null != conflict.getMinVersion()) {
-                    builder.addConflicts(conflict.getName(), GREATER | EQUAL, conflict.getMinVersion());
-                }
+            if (null != conflict.getName()) {
+                if (conflict.isVersionRange()) {
+                    if (null != conflict.getMinVersion()) {
+                        builder.addConflicts(conflict.getName(), GREATER | EQUAL, conflict.getMinVersion());
+                    }
 
-                if (null != conflict.getMaxVersion()) {
-                    builder.addConflicts(conflict.getName(), LESS, conflict.getMaxVersion());
-                }
-            }
-            else {
-                if (null != conflict.getVersion()) {
-                    builder.addConflicts(conflict.getName(), EQUAL, conflict.getVersion());
-                }
-                else {
-                    builder.addConflicts(conflict.getName(), 0, "");
+                    if (null != conflict.getMaxVersion()) {
+                        builder.addConflicts(conflict.getName(), LESS, conflict.getMaxVersion());
+                    }
+                } else {
+                    if (null != conflict.getVersion()) {
+                        builder.addConflicts(conflict.getName(), EQUAL, conflict.getVersion());
+                    } else {
+                        builder.addConflicts(conflict.getName(), 0, "");
+                    }
                 }
             }
         }
