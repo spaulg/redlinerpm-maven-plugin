@@ -1219,54 +1219,54 @@ final public class RpmPackage
         // Event scripting
         this.getLog().debug("Setting event hook scripts");
 
-        RpmScriptTemplateRenderer eventHookTemplate = this.getMojo().getTemplateRenderer();
+        RpmScriptTemplateRenderer scriptTemplateRenderer = this.getMojo().getTemplateRenderer();
         String scriptPath = String.format("%s%s%s-%s", buildDirectory, File.separator, this.getName(), this.getProjectVersion());
         File scriptTemplate;
 
         scriptTemplate = this.getPreTransactionScriptFile();
         if (null != scriptTemplate) {
-            File scriptFile = new File(String.format("%s-pretrans", scriptPath));
-            eventHookTemplate.render(scriptTemplate, scriptFile);
+            File scriptFile = new File(String.format("%s-pretrans-hook", scriptPath));
+            scriptTemplateRenderer.render(scriptTemplate, scriptFile);
             builder.setPreTransScript(scriptFile);
             builder.setPreTransProgram(this.getPreTransactionProgram());
         }
 
         scriptTemplate = this.getPreInstallScriptFile();
         if (null != scriptTemplate) {
-            File scriptFile = new File(String.format("%s-preinstall", scriptPath));
-            eventHookTemplate.render(scriptTemplate, scriptFile);
+            File scriptFile = new File(String.format("%s-preinstall-hook", scriptPath));
+            scriptTemplateRenderer.render(scriptTemplate, scriptFile);
             builder.setPreInstallScript(scriptFile);
             builder.setPreInstallProgram(this.getPreInstallProgram());
         }
 
         scriptTemplate = this.getPostInstallScriptFile();
         if (null != scriptTemplate) {
-            File scriptFile = new File(String.format("%s-postinstall", scriptPath));
-            eventHookTemplate.render(scriptTemplate, scriptFile);
+            File scriptFile = new File(String.format("%s-postinstall-hook", scriptPath));
+            scriptTemplateRenderer.render(scriptTemplate, scriptFile);
             builder.setPostInstallScript(scriptFile);
             builder.setPostInstallProgram(this.getPostInstallProgram());
         }
 
         scriptTemplate = this.getPreUninstallScriptFile();
         if (null != scriptTemplate) {
-            File scriptFile = new File(String.format("%s-preuninstall", scriptPath));
-            eventHookTemplate.render(scriptTemplate, scriptFile);
+            File scriptFile = new File(String.format("%s-preuninstall-hook", scriptPath));
+            scriptTemplateRenderer.render(scriptTemplate, scriptFile);
             builder.setPreUninstallScript(scriptFile);
             builder.setPreUninstallProgram(this.getPreUninstallProgram());
         }
 
         scriptTemplate = this.getPostUninstallScriptFile();
         if (null != scriptTemplate) {
-            File scriptFile = new File(String.format("%s-postuninstall", scriptPath));
-            eventHookTemplate.render(scriptTemplate, scriptFile);
+            File scriptFile = new File(String.format("%s-postuninstall-hook", scriptPath));
+            scriptTemplateRenderer.render(scriptTemplate, scriptFile);
             builder.setPostUninstallScript(scriptFile);
             builder.setPostUninstallProgram(this.getPostUninstallProgram());
         }
 
         scriptTemplate = this.getPostTransactionScriptFile();
         if (null != scriptTemplate) {
-            File scriptFile = new File(String.format("%s-posttrans", scriptPath));
-            eventHookTemplate.render(scriptTemplate, scriptFile);
+            File scriptFile = new File(String.format("%s-posttrans-hook", scriptPath));
+            scriptTemplateRenderer.render(scriptTemplate, scriptFile);
             builder.setPostTransScript(scriptFile);
             builder.setPostTransProgram(this.getPostTransactionProgram());
         }
@@ -1279,7 +1279,7 @@ final public class RpmPackage
 
             for (RpmPackageAssociation dependency : trigger.getDependencies()) {
                 int flags = 0;
-                String version = null;
+                String version = "";
 
                 if (null != dependency.getVersion()) {
                     version = dependency.getVersion();
@@ -1296,8 +1296,33 @@ final public class RpmPackage
                 depends.put(dependency.getName(), new IntString(flags, version));
             }
 
-            // todo: allow specification of trigger lifecycle events using flags
-            builder.addTrigger(new File(trigger.getScriptFile()), trigger.getProgram(), depends, 0);
+            scriptTemplate = trigger.getPreInstallScriptFile();
+            if (null != scriptTemplate) {
+                File scriptFile = new File(String.format("%s-preinstall-trigger", scriptPath));
+                scriptTemplateRenderer.render(scriptTemplate, scriptFile);
+                builder.addTrigger(scriptFile, trigger.getPreInstallProgram(), depends, SCRIPT_TRIGGERPREIN);
+            }
+
+            scriptTemplate = trigger.getPostInstallScriptFile();
+            if (null != scriptTemplate) {
+                File scriptFile = new File(String.format("%s-postinstall-trigger", scriptPath));
+                scriptTemplateRenderer.render(scriptTemplate, scriptFile);
+                builder.addTrigger(scriptFile, trigger.getPostInstallProgram(), depends, SCRIPT_TRIGGERIN);
+            }
+
+            scriptTemplate = trigger.getPreUninstallScriptFile();
+            if (null != scriptTemplate) {
+                File scriptFile = new File(String.format("%s-preuninstall-trigger", scriptPath));
+                scriptTemplateRenderer.render(scriptTemplate, scriptFile);
+                builder.addTrigger(scriptFile, trigger.getPreUninstallProgram(), depends, SCRIPT_TRIGGERUN);
+            }
+
+            scriptTemplate = trigger.getPostUninstallScriptFile();
+            if (null != scriptTemplate) {
+                File scriptFile = new File(String.format("%s-postuninstall-trigger", scriptPath));
+                scriptTemplateRenderer.render(scriptTemplate, scriptFile);
+                builder.addTrigger(scriptFile, trigger.getPostUninstallProgram(), depends, SCRIPT_TRIGGERPOSTUN);
+            }
         }
 
 

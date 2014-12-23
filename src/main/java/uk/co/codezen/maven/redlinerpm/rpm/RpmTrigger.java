@@ -17,6 +17,7 @@
 
 package uk.co.codezen.maven.redlinerpm.rpm;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,14 +27,44 @@ import java.util.List;
 final public class RpmTrigger
 {
     /**
-     * Trigger script file
+     * Pre install event hook script file
      */
-    private String scriptFile = null;
+    private File preInstallScriptFile = null;
 
     /**
-     * Trigger script program
+     * Pre install event hook program
      */
-    private String program = null;
+    private String preInstallProgram = null;
+
+    /**
+     * Post install event hook script file
+     */
+    private File postInstallScriptFile = null;
+
+    /**
+     * Post install event hook program
+     */
+    private String postInstallProgram = null;
+
+    /**
+     * Pre uninstall event hook script file
+     */
+    private File preUninstallScriptFile = null;
+
+    /**
+     * Pre uninstall event hook script program
+     */
+    private String preUninstallProgram = null;
+
+    /**
+     * Post uninstall event hook script file
+     */
+    private File postUninstallScriptFile = null;
+
+    /**
+     * Post uninstall event hook program
+     */
+    private String postUninstallProgram = null;
 
     /**
      * Trigger package associations
@@ -42,44 +73,165 @@ final public class RpmTrigger
 
 
     /**
-     * Set trigger script file
+     * Set pre install script file
      *
-     * @param scriptFile Trigger script file
+     * @param preInstallScriptFile Pre install script file
      */
-    public void setScriptFile(String scriptFile)
+    public void setPreInstallScriptFile(File preInstallScriptFile)
     {
-        this.scriptFile = scriptFile;
+        this.preInstallScriptFile = preInstallScriptFile;
     }
 
     /**
-     * Get trigger script file
+     * Get pre install script file
      *
-     * @return Trigger script file
+     * @return Pre install script file
      */
-    public String getScriptFile()
+    public File getPreInstallScriptFile()
     {
-        return scriptFile;
+        return this.preInstallScriptFile;
     }
 
     /**
-     * Set trigger program
+     * Set pre install program
      *
-     * @param program Trigger program
+     * @param preInstallProgram Pre install program
      */
-    public void setProgram(String program)
+    public void setPreInstallProgram(String preInstallProgram)
     {
-        this.program = program;
+        this.preInstallProgram = preInstallProgram;
     }
 
     /**
-     * Get trigger program
+     * Get pre install program
      *
-     * @return Trigger program
+     * @return Pre install program
      */
-    public String getProgram()
+    public String getPreInstallProgram()
     {
-        return program;
+        return this.preInstallProgram;
     }
+
+    /**
+     * Set post install script file
+     *
+     * @param postInstallScriptFile Post install script file
+     */
+    public void setPostInstallScriptFile(File postInstallScriptFile)
+    {
+        this.postInstallScriptFile = postInstallScriptFile;
+    }
+
+    /**
+     * Get post install script file
+     *
+     * @return Post install script file
+     */
+    public File getPostInstallScriptFile()
+    {
+        return this.postInstallScriptFile;
+    }
+
+    /**
+     * Set post install program
+     *
+     * @param postInstallProgram Post install program
+     */
+    public void setPostInstallProgram(String postInstallProgram)
+    {
+        this.postInstallProgram = postInstallProgram;
+    }
+
+    /**
+     * Get post install program
+     *
+     * @return Post install program
+     */
+    public String getPostInstallProgram()
+    {
+        return this.postInstallProgram;
+    }
+
+    /**
+     * Set pre uninstall script file
+     *
+     * @param preUninstallScriptFile Pre uninstall script file
+     */
+    public void setPreUninstallScriptFile(File preUninstallScriptFile)
+    {
+        this.preUninstallScriptFile = preUninstallScriptFile;
+    }
+
+    /**
+     * Get pre uninstall script file
+     *
+     * @return Pre uninstall script file
+     */
+    public File getPreUninstallScriptFile()
+    {
+        return this.preUninstallScriptFile;
+    }
+
+    /**
+     * Set pre uninstall program
+     *
+     * @param preUninstallProgram Pre uninstall program
+     */
+    public void setPreUninstallProgram(String preUninstallProgram)
+    {
+        this.preUninstallProgram = preUninstallProgram;
+    }
+
+    /**
+     * Get pre uninstall program
+     *
+     * @return Pre uninstall program
+     */
+    public String getPreUninstallProgram()
+    {
+        return this.preUninstallProgram;
+    }
+
+    /**
+     * Set post uninstall script file
+     *
+     * @param postUninstallScriptFile Post uninstall script file
+     */
+    public void setPostUninstallScriptFile(File postUninstallScriptFile)
+    {
+        this.postUninstallScriptFile = postUninstallScriptFile;
+    }
+
+    /**
+     * Get post uninstall script file
+     *
+     * @return Post uninstall script file
+     */
+    public File getPostUninstallScriptFile()
+    {
+        return this.postUninstallScriptFile;
+    }
+
+    /**
+     * Set post uninstall program
+     *
+     * @param postUninstallProgram Post uninstall program
+     */
+    public void setPostUninstallProgram(String postUninstallProgram)
+    {
+        this.postUninstallProgram = postUninstallProgram;
+    }
+
+    /**
+     * Get post uninstall program
+     *
+     * @return Post uninstall program
+     */
+    public String getPostUninstallProgram()
+    {
+        return this.postUninstallProgram;
+    }
+
 
     /**
      * Set trigger packages

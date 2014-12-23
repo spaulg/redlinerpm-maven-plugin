@@ -44,6 +44,7 @@ final public class RpmScriptTemplateRenderer
      */
     public void addParameter(String name, Object value)
     {
+        // todo: parameter names with dots dont interpret very easily in mvel. Split these out and use a nested map structure
         this.parameterMap.put(name, value);
     }
 
