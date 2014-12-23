@@ -4,7 +4,7 @@
 
     <groupId>uk.co.codezen</groupId>
     <artifactId>redlinerpm-maven-plugin</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>maven-plugin</packaging>
 
     <name>maven-redlinerpm-plugin Maven Mojo</name>
@@ -29,7 +29,7 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git@github.com/spaulg/redlinerpm-maven-plugin.git</connection>
+        <connection>scm:git:https://github.com/spaulg/redlinerpm-maven-plugin.git</connection>
         <developerConnection>scm:git:git@github.com/spaulg/redlinerpm-maven-plugin.git</developerConnection>
         <url>https://github.com/spaulg/redlinerpm-maven-plugin</url>
     </scm>
