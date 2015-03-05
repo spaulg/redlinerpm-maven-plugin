@@ -16,7 +16,7 @@ Add the plugin to the <plugins> section within your pom.xml file.
     <plugin>
         <groupId>uk.co.codezen</groupId>
         <artifactId>redlinerpm-maven-plugin</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
         <extensions>true</extensions>
     
         <configuration>
