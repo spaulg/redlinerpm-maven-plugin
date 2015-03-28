@@ -70,6 +70,7 @@ Add the plugin to the <plugins> section within your pom.xml file.
             </plugin>
         </plugins>
     </build>
+</project>
 ```
 
 ## Motivations
