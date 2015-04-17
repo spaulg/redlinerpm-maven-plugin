@@ -1,0 +1,123 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>uk.co.codezen.redlinerpm-maven-plugin</groupId>
+    <artifactId>example</artifactId>
+    <version>1.0</version>
+    <packaging>rpm</packaging>
+
+    <build>
+        <outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}</outputDirectory>
+
+        <resources>
+            <resource>
+                <directory>src/main/php</directory>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+            </plugin>
+
+            <plugin>
+                <groupId>uk.co.codezen</groupId>
+                <artifactId>redlinerpm-maven-plugin</artifactId>
+                <version>1.0</version>
+                <extensions>true</extensions>
+
+                <configuration>
+                    <defaultUser>apache</defaultUser>
+                    <defaultGroup>apache</defaultGroup>
+                    <defaultDestination>/var/www/${project.name}</defaultDestination>
+
+                    <excludes>
+                        <source>**/*.bak</source>
+                    </excludes>
+
+                    <packages>
+                        <package>
+                            <preTransactionScriptFile>src/main/rpm/pre-transaction.sh</preTransactionScriptFile>
+                            <preInstallScriptFile>src/main/rpm/pre-install.sh</preInstallScriptFile>
+                            <postInstallScriptFile>src/main/rpm/post-install.sh</postInstallScriptFile>
+                            <preUninstallScriptFile>src/main/rpm/pre-uninstall.sh</preUninstallScriptFile>
+                            <postUninstallScriptFile>src/main/rpm/post-uninstall.sh</postUninstallScriptFile>
+                            <postTransactionScriptFile>src/main/rpm/post-transaction.sh</postTransactionScriptFile>
+
+                            <dependencies>
+                                <dependency>
+                                    <name>php</name>
+                                    <version>[5,)</version>
+                                </dependency>
+
+                                <dependency>
+                                    <name>${project.name}-libs</name>
+                                    <version>${project.version}</version>
+                                </dependency>
+                            </dependencies>
+
+                            <obsoletes>
+                                <obsolete>
+                                    <name>old-single-package</name>
+                                    <version>1.0</version>
+                                </obsolete>
+                            </obsoletes>
+
+                            <conflicts>
+                                <conflict>
+                                    <name>mysql</name>
+                                </conflict>
+                            </conflicts>
+
+                            <rules>
+                                <rule>
+                                    <includes>
+                                        <include>**/*.ini</include>
+                                    </includes>
+
+                                    <directives>
+                                        <directive>config</directive>
+                                        <directive>noreplace</directive>
+                                    </directives>
+                                </rule>
+
+                                <rule>
+                                    <includes>
+                                        <include>bin/hello</include>
+                                    </includes>
+
+                                    <fileMode>0755</fileMode>
+                                </rule>
+
+                                <rule>
+                                    <includes>
+                                        <include>**/*.php</include>
+                                    </includes>
+
+                                    <excludes>
+                                        <exclude>libs/*.php</exclude>
+                                    </excludes>
+                                </rule>
+                            </rules>
+                        </package>
+
+                        <package>
+                            <name>${project.name}-libs</name>
+
+                            <rules>
+                                <rule>
+                                    <includes>
+                                        <include>libs/*.php</include>
+                                    </includes>
+                                </rule>
+                            </rules>
+                        </package>
+                    </packages>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
