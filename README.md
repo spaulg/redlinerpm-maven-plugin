@@ -18,7 +18,7 @@ Add the plugin to the <plugins> section within your pom.xml file.
     
     <groupId>com.example</groupId>
     <artifactId>my-project</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>rpm</packaging>
     
     <build>
