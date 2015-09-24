@@ -4,7 +4,7 @@
 
     <groupId>uk.co.codezen</groupId>
     <artifactId>redlinerpm-maven-plugin</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>maven-plugin</packaging>
 
     <name>maven-redlinerpm-plugin Maven Mojo</name>
@@ -206,7 +206,7 @@
         <dependency>
             <groupId>org.redline-rpm</groupId>
             <artifactId>redline</artifactId>
-            <version>1.1.16</version>
+            <version>1.2.2</version>
         </dependency>
 
         <dependency>
