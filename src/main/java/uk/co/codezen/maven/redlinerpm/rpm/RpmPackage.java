@@ -1358,11 +1358,6 @@ final public class RpmPackage
         this.getLog().info(String.format("Generating RPM file %s", rpmFileName));
         File packageFile = new File(rpmFileName);
 
-        if (packageFile.exists()) {
-            // RPM artifact already exists, possibly from a previous build
-            throw new DuplicateRpmArtifactException(rpmFileName);
-        }
-
         FileOutputStream packageOutputStream = new FileOutputStream(packageFile);
         builder.build(packageOutputStream.getChannel());
 

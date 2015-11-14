@@ -8,7 +8,6 @@ import org.redline_rpm.header.Architecture;
 import org.redline_rpm.header.Os;
 import uk.co.codezen.maven.redlinerpm.mojo.PackageRpmMojo;
 import uk.co.codezen.maven.redlinerpm.rpm.exception.AbstractRpmException;
-import uk.co.codezen.maven.redlinerpm.rpm.exception.DuplicateRpmArtifactException;
 import uk.co.codezen.maven.redlinerpm.rpm.exception.UnknownArchitectureException;
 import uk.co.codezen.maven.redlinerpm.rpm.exception.UnknownOperatingSystemException;
 
@@ -442,17 +441,6 @@ public class RpmPackageTest
 
         String rpmFileName = String.format("%s%s%s", this.testOutputPath, File.separator, this.rpmPackage.getFinalName());
         assertEquals(true, new File(rpmFileName).exists());
-        boolean exThrown = false;
-
-        // Build again, causing duplicate file
-        try {
-            this.rpmPackage.build();
-        }
-        catch(DuplicateRpmArtifactException ex) {
-            exThrown = true;
-        }
-
-        assertEquals(true, exThrown);
     }
 
     @Test
