@@ -1176,10 +1176,7 @@ final public class RpmPackage
         builder.setPackager(this.getPackager());
         builder.setUrl(this.getUrl());
         builder.setPrefixes(this.getPrefixes().toArray(new String[0]));
-
-        if (sourceRpm != null) {
-		builder.addHeaderEntry(Header.HeaderTag.SOURCERPM, sourceRpm);
-	}
+        builder.setSourceRpm(this.getSourceRpm());
 
         // Process dependencies
         for (RpmPackageAssociation dependency : this.getDependencies()) {
