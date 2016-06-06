@@ -1178,8 +1178,8 @@ final public class RpmPackage
         builder.setPrefixes(this.getPrefixes().toArray(new String[0]));
 
         if (sourceRpm != null) {
-			builder.addHeaderEntry(Header.HeaderTag.SOURCERPM, sourceRpm);
-		}
+		builder.addHeaderEntry(Header.HeaderTag.SOURCERPM, sourceRpm);
+	}
 
         // Process dependencies
         for (RpmPackageAssociation dependency : this.getDependencies()) {
