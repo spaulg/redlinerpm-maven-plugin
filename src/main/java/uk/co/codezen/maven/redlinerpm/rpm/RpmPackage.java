@@ -120,6 +120,11 @@ final public class RpmPackage
      * Packager of RPM
      */
     private String packager = null;
+    
+    /**
+     * Source RPM Name
+     */
+    private String sourceRpm = null;
 
     /**
      * Attach the artifact
@@ -700,6 +705,26 @@ final public class RpmPackage
     {
         return this.packager;
     }
+    
+    /**
+     * Set source RPM name
+     *
+     * @param sourceRpm Package sourceRpm
+     */
+    public void setSourceRpm(String sourceRpm)
+    {
+        this.sourceRpm = sourceRpm;
+    }
+
+    /**
+     * Get source RPM name
+     *
+     * @return sourceRpm
+     */
+    public String getSourceRpm()
+    {
+        return this.sourceRpm;
+    }
 
     /**
      * Set artifact attachment
@@ -1151,6 +1176,10 @@ final public class RpmPackage
         builder.setPackager(this.getPackager());
         builder.setUrl(this.getUrl());
         builder.setPrefixes(this.getPrefixes().toArray(new String[0]));
+
+        if (sourceRpm != null) {
+		builder.addHeaderEntry(Header.HeaderTag.SOURCERPM, sourceRpm);
+	}
 
         // Process dependencies
         for (RpmPackageAssociation dependency : this.getDependencies()) {
