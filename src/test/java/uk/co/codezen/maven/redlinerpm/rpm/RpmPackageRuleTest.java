@@ -40,7 +40,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RpmPackageRuleTest
+public class RpmPackageRuleTest extends BasedOwnedObjectTest
 {
     String testOutputPath;
 
@@ -79,6 +79,12 @@ public class RpmPackageRuleTest
         this.rpmFileRule = new RpmPackageRule();
         this.rpmFileRule.setPackage(rpmPackage);
         this.rpmFileRule.setBase("build");
+    }
+
+    @Override
+    public BaseOwnedObject getBaseOwnedObject()
+    {
+        return rpmFileRule;
     }
 
     @Test
@@ -125,48 +131,6 @@ public class RpmPackageRuleTest
         this.rpmFileRule.setDestination(String.format("%sfoo", File.separator));
         assertEquals(String.format("%sfoo", File.separator), this.rpmFileRule.getDestination());
         assertEquals(String.format("%sfoo", File.separator), this.rpmFileRule.getDestinationOrDefault());
-    }
-
-    @Test
-    public void modeAccessors()
-    {
-        assertEquals(0644, this.rpmFileRule.getModeOrDefault());
-        this.rpmFileRule.setFileMode(0755);
-        assertEquals(0755, this.rpmFileRule.getModeOrDefault());
-    }
-
-    @Test
-    public void ownerAccessors()
-    {
-        this.rpmFileRule.setOwner("");
-        assertEquals("root", this.rpmFileRule.getOwnerOrDefault());
-
-        this.rpmFileRule.setOwner(null);
-        assertEquals("root", this.rpmFileRule.getOwnerOrDefault());
-
-        assertEquals("root", this.rpmFileRule.getOwnerOrDefault());
-        this.rpmFileRule.setOwner("owner");
-        assertEquals("owner", this.rpmFileRule.getOwnerOrDefault());
-
-        this.rpmFileRule.setOwner("");
-        assertEquals("root", this.rpmFileRule.getOwnerOrDefault());
-    }
-
-    @Test
-    public void groupAccessors()
-    {
-        this.rpmFileRule.setGroup("");
-        assertEquals("root", this.rpmFileRule.getGroupOrDefault());
-
-        this.rpmFileRule.setGroup(null);
-        assertEquals("root", this.rpmFileRule.getGroupOrDefault());
-
-        assertEquals("root", this.rpmFileRule.getGroupOrDefault());
-        this.rpmFileRule.setGroup("group");
-        assertEquals("group", this.rpmFileRule.getGroupOrDefault());
-
-        this.rpmFileRule.setGroup("");
-        assertEquals("root", this.rpmFileRule.getGroupOrDefault());
     }
 
     @Test

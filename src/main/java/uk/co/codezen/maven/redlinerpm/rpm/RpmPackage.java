@@ -237,6 +237,11 @@ final public class RpmPackage
     private List<RpmPackageAssociation> conflicts = new ArrayList<RpmPackageAssociation>();
 
     /**
+     * Links
+     */
+    private List<RpmLink> links = new ArrayList<RpmLink>();
+
+    /**
      * Package file matching rules
      */
     private List<RpmPackageRule> rules = new ArrayList<RpmPackageRule>();
@@ -455,6 +460,32 @@ final public class RpmPackage
     public List<RpmPackageAssociation> getConflicts()
     {
         return this.conflicts;
+    }
+
+    /**
+     * Set package links
+     *
+     * @param links Package links
+     */
+    public void setLinks(List<RpmLink> links)
+    {
+        if (null != links) {
+            for (RpmLink link : links) {
+                link.setPackage(this);
+            }
+        }
+
+        this.links = links;
+    }
+
+    /**
+     * Get package links
+     *
+     * @return Package links
+     */
+    public List<RpmLink> getLinks()
+    {
+        return this.links;
     }
 
     /**
@@ -1241,6 +1272,15 @@ final public class RpmPackage
             }
         }
 
+        // Process Links
+        for (RpmLink link : this.getLinks()) {
+            builder.addLink(
+                    link.getPath(),
+                    link.getTarget(),
+                    link.getModeOrDefault(),
+                    link.getOwnerOrDefault(),
+                    link.getGroupOrDefault());
+        }
 
         // Event scripting
         this.getLog().debug("Setting event hook scripts");
