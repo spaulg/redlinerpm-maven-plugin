@@ -37,7 +37,7 @@ import java.util.*;
  * RPM file
  * Represents an file to be included within the RPM
  */
-final public class RpmPackageRule
+final public class RpmPackageRule extends BaseOwnedObject
 {
     /**
      * RPM package
@@ -55,21 +55,6 @@ final public class RpmPackageRule
     private String destination = null;
 
     /**
-     * Destination file mode
-     */
-    private int fileMode = 0;
-
-    /**
-     * Destination file owner
-     */
-    private String owner = null;
-
-    /**
-     * Destination file group
-     */
-    private String group = null;
-
-    /**
      * List of file include rules
      */
     private List<String> includes = new ArrayList<String>();
@@ -83,7 +68,6 @@ final public class RpmPackageRule
      * File directives
      */
     private Directive directive = new Directive();
-
 
     /**
      * Set associated RPM package
@@ -100,6 +84,7 @@ final public class RpmPackageRule
      *
      * @return RPM package
      */
+    @Override
     public RpmPackage getPackage()
     {
         return this.rpmPackage;
@@ -165,90 +150,6 @@ final public class RpmPackageRule
         }
         else {
             return this.destination;
-        }
-    }
-
-    /**
-     * Set file mode
-     *
-     * @param fileMode File mode
-     */
-    public void setFileMode(int fileMode)
-    {
-        this.fileMode = fileMode;
-    }
-
-    /**
-     * Get file mode, or the default setting if not set
-     *
-     * @return File mode
-     */
-    public int getModeOrDefault()
-    {
-        if (0 == this.fileMode) {
-            return this.getPackage().getMojo().getDefaultFileMode();
-        }
-        else {
-            return this.fileMode;
-        }
-    }
-
-    /**
-     * Set file owner
-     *
-     * @param owner File owner
-     */
-    public void setOwner(String owner)
-    {
-        if (null != owner && owner.equals("")) {
-            owner = null;
-        }
-
-        this.owner = owner;
-    }
-
-    /**
-     * Get file owner, or the default setting if not set
-     *
-     * @return File owner
-     */
-    public String getOwnerOrDefault()
-    {
-        if (null == this.owner)
-        {
-            return this.getPackage().getMojo().getDefaultOwner();
-        }
-        else {
-            return this.owner;
-        }
-    }
-
-    /**
-     * Set file group
-     *
-     * @param group File group
-     */
-    public void setGroup(String group)
-    {
-        if (null != group && group.equals("")) {
-            group = null;
-        }
-
-        this.group = group;
-    }
-
-    /**
-     * Get file group, or the default setting if not set
-     *
-     * @return File group
-     */
-    public String getGroupOrDefault()
-    {
-        if (null == this.group) {
-            return this.getPackage().getMojo().getDefaultGroup();
-        }
-        else {
-            return this.group;
         }
     }
 
