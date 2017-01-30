@@ -222,6 +222,11 @@ final public class RpmPackage
     private List<String> prefixes = new ArrayList<String>();
 
     /**
+     * Builtins
+     */
+    private List<String> builtins = new ArrayList<String>();
+
+    /**
      * Dependencies
      */
     private List<RpmPackageAssociation> dependencies = new ArrayList<RpmPackageAssociation>();
@@ -1136,9 +1141,30 @@ final public class RpmPackage
      *
      * @return List of prefixes
      */
-    public List<String> getPrefixes()
-    {
+    public List<String> getPrefixes() {
         return this.prefixes;
+    }
+
+    /**
+     * Set list of builtin directories
+     *
+     * @param builtins List of Builtin Directories
+     */
+    public void setBuiltins(List<String> builtins) {
+        if (null == builtins) {
+            prefixes = new ArrayList<String>();
+        }
+
+        this.builtins = builtins;
+    }
+
+    /**
+     * Get list of builtin directories
+     *
+     * @return List of builtin directories
+     */
+    public List<String> getBuiltins() {
+        return this.builtins;
     }
 
     /**
@@ -1146,8 +1172,7 @@ final public class RpmPackage
      *
      * @param rules Package rules
      */
-    public void setRules(List<RpmPackageRule> rules)
-    {
+    public void setRules(List<RpmPackageRule> rules) {
         if (null != rules) {
             for (RpmPackageRule rpmPackageRule : rules) {
                 rpmPackageRule.setPackage(this);
@@ -1208,6 +1233,10 @@ final public class RpmPackage
         builder.setUrl(this.getUrl());
         builder.setPrefixes(this.getPrefixes().toArray(new String[0]));
         builder.setSourceRpm(this.getSourceRpm());
+
+        for (String builtin : this.getBuiltins()) {
+            builder.addBuiltinDirectory(builtin);
+        }
 
         // Process dependencies
         for (RpmPackageAssociation dependency : this.getDependencies()) {
