@@ -120,7 +120,7 @@ final public class RpmPackage
      * Packager of RPM
      */
     private String packager = null;
-    
+
     /**
      * Source RPM Name
      */
@@ -741,7 +741,7 @@ final public class RpmPackage
     {
         return this.packager;
     }
-    
+
     /**
      * Set source RPM name
      *
@@ -1152,7 +1152,7 @@ final public class RpmPackage
      */
     public void setBuiltins(List<String> builtins) {
         if (null == builtins) {
-            prefixes = new ArrayList<String>();
+            builtins = new ArrayList<String>();
         }
 
         this.builtins = builtins;

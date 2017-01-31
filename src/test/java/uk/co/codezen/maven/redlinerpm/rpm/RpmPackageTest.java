@@ -392,7 +392,7 @@ public class RpmPackageTest
         assertNotNull(this.rpmPackage.getBuiltins());
 
         this.rpmPackage.setBuiltins(null);
-        assertNotNull(this.rpmPackage.getPrefixes());
+        assertNotNull(this.rpmPackage.getBuiltins());
 
         this.rpmPackage.setBuiltins(builtins);
         assertEquals(builtins, this.rpmPackage.getBuiltins());
