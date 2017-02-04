@@ -385,6 +385,20 @@ public class RpmPackageTest
     }
 
     @Test
+    public void builtinsAccessors()
+    {
+        List<String> builtins = new ArrayList<String>();
+
+        assertNotNull(this.rpmPackage.getBuiltins());
+
+        this.rpmPackage.setBuiltins(null);
+        assertNotNull(this.rpmPackage.getBuiltins());
+
+        this.rpmPackage.setBuiltins(builtins);
+        assertEquals(builtins, this.rpmPackage.getBuiltins());
+    }
+
+    @Test
     public void build() throws NoSuchAlgorithmException, IOException, AbstractRpmException
     {
         this.project.setArtifactId("build");
