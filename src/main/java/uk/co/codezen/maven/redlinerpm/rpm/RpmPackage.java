@@ -1141,7 +1141,8 @@ final public class RpmPackage
      *
      * @return List of prefixes
      */
-    public List<String> getPrefixes() {
+    public List<String> getPrefixes()
+    {
         return this.prefixes;
     }
 
@@ -1150,7 +1151,8 @@ final public class RpmPackage
      *
      * @param builtins List of Builtin Directories
      */
-    public void setBuiltins(List<String> builtins) {
+    public void setBuiltins(List<String> builtins)
+    {
         if (null == builtins) {
             builtins = new ArrayList<String>();
         }
@@ -1163,7 +1165,8 @@ final public class RpmPackage
      *
      * @return List of builtin directories
      */
-    public List<String> getBuiltins() {
+    public List<String> getBuiltins()
+    {
         return this.builtins;
     }
 
@@ -1172,7 +1175,8 @@ final public class RpmPackage
      *
      * @param rules Package rules
      */
-    public void setRules(List<RpmPackageRule> rules) {
+    public void setRules(List<RpmPackageRule> rules)
+    {
         if (null != rules) {
             for (RpmPackageRule rpmPackageRule : rules) {
                 rpmPackageRule.setPackage(this);
